@@ -1,0 +1,334 @@
+[
+  {
+    "team": "Adelaide",
+    "trend": "Stable",
+    "narrative_tags": [
+      "Highly Efficient"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.6,
+      "recent_avg_margin": 9.0,
+      "recent_avg_score": 89.6,
+      "win_rate_trend": 0.19999999999999996,
+      "margin_trend": 6.4,
+      "weighted_margin_trend": 5.064119069045326,
+      "strength_of_schedule": 0.4392338086416081,
+      "finishing_power": 1.8,
+      "rolling_efficiency": 147.76119402985074,
+      "games_analyzed": 82
+    }
+  },
+  {
+    "team": "Brisbane Lions",
+    "trend": "Falling",
+    "narrative_tags": [
+      "Struggling to Convert"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": -13.8,
+      "recent_avg_score": 97.0,
+      "win_rate_trend": -0.4,
+      "margin_trend": -46.400000000000006,
+      "weighted_margin_trend": -44.908548203509696,
+      "strength_of_schedule": 0.5303837654673962,
+      "finishing_power": 0.0,
+      "rolling_efficiency": 62.69430051813472,
+      "games_analyzed": 92
+    }
+  },
+  {
+    "team": "Carlton",
+    "trend": "Rising",
+    "narrative_tags": [
+      "Battle-Tested Rise"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.6,
+      "recent_avg_margin": 0.0,
+      "recent_avg_score": 82.4,
+      "win_rate_trend": 0.6,
+      "margin_trend": 16.0,
+      "weighted_margin_trend": 15.714956843824533,
+      "strength_of_schedule": 0.5735907899375192,
+      "finishing_power": 5.2,
+      "rolling_efficiency": 124.50980392156863,
+      "games_analyzed": 85
+    }
+  },
+  {
+    "team": "Collingwood",
+    "trend": "Falling",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.2,
+      "recent_avg_margin": -10.8,
+      "recent_avg_score": 84.2,
+      "win_rate_trend": -0.39999999999999997,
+      "margin_trend": -21.8,
+      "weighted_margin_trend": -22.80836609169628,
+      "strength_of_schedule": 0.503996933661387,
+      "finishing_power": -1.4,
+      "rolling_efficiency": 100.0,
+      "games_analyzed": 86
+    }
+  },
+  {
+    "team": "Essendon",
+    "trend": "Falling",
+    "narrative_tags": [
+      "Struggling to Convert"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.0,
+      "recent_avg_margin": -33.8,
+      "recent_avg_score": 68.0,
+      "win_rate_trend": -0.2,
+      "margin_trend": -16.4,
+      "weighted_margin_trend": -13.692223376102906,
+      "strength_of_schedule": 0.45284737938167324,
+      "finishing_power": 1.0,
+      "rolling_efficiency": 65.39923954372624,
+      "games_analyzed": 81
+    }
+  },
+  {
+    "team": "Fremantle",
+    "trend": "Stable",
+    "narrative_tags": [
+      "Highly Efficient"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 1.0,
+      "recent_avg_margin": 25.0,
+      "recent_avg_score": 102.6,
+      "win_rate_trend": 0.0,
+      "margin_trend": -2.6000000000000014,
+      "weighted_margin_trend": 3.613955924937489,
+      "strength_of_schedule": 0.5230069457193841,
+      "finishing_power": 7.2,
+      "rolling_efficiency": 146.0093896713615,
+      "games_analyzed": 82
+    }
+  },
+  {
+    "team": "Geelong",
+    "trend": "Rising",
+    "narrative_tags": [
+      "Elite 4th Quarter"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.8,
+      "recent_avg_margin": 33.4,
+      "recent_avg_score": 113.0,
+      "win_rate_trend": 0.20000000000000007,
+      "margin_trend": 13.799999999999997,
+      "weighted_margin_trend": 16.603628196754084,
+      "strength_of_schedule": 0.5238660560280735,
+      "finishing_power": 15.2,
+      "rolling_efficiency": 126.22950819672131,
+      "games_analyzed": 86
+    }
+  },
+  {
+    "team": "Gold Coast",
+    "trend": "Stable",
+    "narrative_tags": [
+      "Late Game Fade"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.6,
+      "recent_avg_margin": 3.8,
+      "recent_avg_score": 87.6,
+      "win_rate_trend": 0.0,
+      "margin_trend": -13.0,
+      "weighted_margin_trend": -9.000194559347124,
+      "strength_of_schedule": 0.4697607764133682,
+      "finishing_power": -10.4,
+      "rolling_efficiency": 119.67213114754098,
+      "games_analyzed": 82
+    }
+  },
+  {
+    "team": "Greater Western Sydney",
+    "trend": "Rising",
+    "narrative_tags": [
+      "Highly Efficient",
+      "Soft Draw Rise"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.6,
+      "recent_avg_margin": 20.8,
+      "recent_avg_score": 104.4,
+      "win_rate_trend": 0.19999999999999996,
+      "margin_trend": 23.8,
+      "weighted_margin_trend": 20.987093140193643,
+      "strength_of_schedule": 0.4421595419027352,
+      "finishing_power": 0.8,
+      "rolling_efficiency": 144.71544715447155,
+      "games_analyzed": 87
+    }
+  },
+  {
+    "team": "Hawthorn",
+    "trend": "Falling",
+    "narrative_tags": [
+      "Late Game Fade"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": 1.4,
+      "recent_avg_score": 88.2,
+      "win_rate_trend": -0.6,
+      "margin_trend": -20.6,
+      "weighted_margin_trend": -23.808633245068627,
+      "strength_of_schedule": 0.5437753281987849,
+      "finishing_power": -11.2,
+      "rolling_efficiency": 108.69565217391303,
+      "games_analyzed": 86
+    }
+  },
+  {
+    "team": "Melbourne",
+    "trend": "Falling",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": 0.4,
+      "recent_avg_score": 98.6,
+      "win_rate_trend": -0.4,
+      "margin_trend": -10.4,
+      "weighted_margin_trend": -9.420209827692613,
+      "strength_of_schedule": 0.5002813495929562,
+      "finishing_power": -2.0,
+      "rolling_efficiency": 95.56313993174061,
+      "games_analyzed": 83
+    }
+  },
+  {
+    "team": "North Melbourne",
+    "trend": "Falling",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.2,
+      "recent_avg_margin": -25.2,
+      "recent_avg_score": 91.4,
+      "win_rate_trend": -0.39999999999999997,
+      "margin_trend": -36.0,
+      "weighted_margin_trend": -37.34220678416589,
+      "strength_of_schedule": 0.5772580237524626,
+      "finishing_power": 2.2,
+      "rolling_efficiency": 79.59183673469387,
+      "games_analyzed": 80
+    }
+  },
+  {
+    "team": "Port Adelaide",
+    "trend": "Falling",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.2,
+      "recent_avg_margin": -6.4,
+      "recent_avg_score": 74.6,
+      "win_rate_trend": -0.2,
+      "margin_trend": -23.6,
+      "weighted_margin_trend": -19.0942203207957,
+      "strength_of_schedule": 0.5441166460912215,
+      "finishing_power": 5.6,
+      "rolling_efficiency": 76.89393939393939,
+      "games_analyzed": 85
+    }
+  },
+  {
+    "team": "Richmond",
+    "trend": "Rising",
+    "narrative_tags": [
+      "Struggling to Convert",
+      "Soft Draw Rise"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": -31.6,
+      "recent_avg_score": 72.6,
+      "win_rate_trend": 0.4,
+      "margin_trend": 25.799999999999997,
+      "weighted_margin_trend": 28.880977405181895,
+      "strength_of_schedule": 0.425970561666401,
+      "finishing_power": -4.2,
+      "rolling_efficiency": 60.59701492537314,
+      "games_analyzed": 81
+    }
+  },
+  {
+    "team": "St Kilda",
+    "trend": "Falling",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": -7.2,
+      "recent_avg_score": 83.6,
+      "win_rate_trend": -0.19999999999999996,
+      "margin_trend": -24.2,
+      "weighted_margin_trend": -23.854093221683076,
+      "strength_of_schedule": 0.47707673796604205,
+      "finishing_power": -6.6,
+      "rolling_efficiency": 84.45945945945947,
+      "games_analyzed": 82
+    }
+  },
+  {
+    "team": "Sydney",
+    "trend": "Falling",
+    "narrative_tags": [
+      "Highly Efficient"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.8,
+      "recent_avg_margin": 23.6,
+      "recent_avg_score": 113.4,
+      "win_rate_trend": 0.0,
+      "margin_trend": -26.4,
+      "weighted_margin_trend": -27.425014363345245,
+      "strength_of_schedule": 0.43687155166747954,
+      "finishing_power": -1.8,
+      "rolling_efficiency": 139.07563025210084,
+      "games_analyzed": 85
+    }
+  },
+  {
+    "team": "West Coast",
+    "trend": "Rising",
+    "narrative_tags": [],
+    "supporting_metrics": {
+      "recent_win_rate": 0.4,
+      "recent_avg_margin": -1.2,
+      "recent_avg_score": 82.0,
+      "win_rate_trend": 0.2,
+      "margin_trend": 64.6,
+      "weighted_margin_trend": 73.6849758144994,
+      "strength_of_schedule": 0.46476090587065355,
+      "finishing_power": 3.6,
+      "rolling_efficiency": 116.97247706422019,
+      "games_analyzed": 81
+    }
+  },
+  {
+    "team": "Western Bulldogs",
+    "trend": "Rising",
+    "narrative_tags": [
+      "Battle-Tested Rise"
+    ],
+    "supporting_metrics": {
+      "recent_win_rate": 0.6,
+      "recent_avg_margin": -3.0,
+      "recent_avg_score": 85.6,
+      "win_rate_trend": 0.19999999999999996,
+      "margin_trend": 25.2,
+      "weighted_margin_trend": 26.797809894559535,
+      "strength_of_schedule": 0.5509202349419701,
+      "finishing_power": -8.8,
+      "rolling_efficiency": 98.0544747081712,
+      "games_analyzed": 82
+    }
+  }
+]
