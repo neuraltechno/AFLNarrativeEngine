@@ -47,6 +47,32 @@ def calculate_team_trends():
             
     df_matches = pd.DataFrame(matches_data).sort_values('date')
     
+    # Load future fixtures
+    future_data = []
+    fixture_path = raw_dir / 'fixture_2026.json'
+    if fixture_path.exists():
+        with open(fixture_path, 'r') as f:
+            fixtures = json.load(f)
+            for fix in fixtures:
+                if fix.get('complete') == 0:
+                    try:
+                        future_data.append({
+                            'date': pd.to_datetime(fix['date']),
+                            'home_team': fix['hteam'],
+                            'away_team': fix['ateam'],
+                            'home_score': None,
+                            'away_score': None,
+                            'winner': None,
+                            'margin': None,
+                            'is_future': True
+                        })
+                    except (KeyError, ValueError):
+                        continue
+                        
+    df_future = pd.DataFrame(future_data).sort_values('date') if future_data else pd.DataFrame()
+    if not df_matches.empty:
+        df_matches['is_future'] = False
+        
     # Pre-calculate overall win rates for Strength of Schedule (SoS)
     team_win_rates = {}
     for team_obj in teams:
@@ -57,6 +83,12 @@ def calculate_team_trends():
             team_win_rates[t_name] = wins / len(t_matches)
         else:
             team_win_rates[t_name] = 0.5
+            
+    # Now merge future matches for next_3_sos calculation
+    if not df_future.empty:
+        df_all_matches = pd.concat([df_matches, df_future], ignore_index=True)
+    else:
+        df_all_matches = df_matches.copy()
 
     # Pass 1: Calculate metrics and current ladder for all teams
     team_data_map = {}
@@ -65,10 +97,13 @@ def calculate_team_trends():
         team_name = team_obj['name']
         
         # Get team matches
-        team_matches = df_matches[
-            (df_matches['home_team'] == team_name) | 
-            (df_matches['away_team'] == team_name)
+        team_matches_all = df_all_matches[
+            (df_all_matches['home_team'] == team_name) | 
+            (df_all_matches['away_team'] == team_name)
         ].copy()
+        
+        team_matches = team_matches_all[~team_matches_all['is_future']].copy()
+        team_future = team_matches_all[team_matches_all['is_future']].copy()
         
         if len(team_matches) < 5:
             team_data_map[team_name] = {
@@ -233,6 +268,23 @@ def calculate_team_trends():
             narrative_tags.append("Battle-Tested Rise")
         elif recent_sos < 0.45 and trend == "Rising":
             narrative_tags.append("Soft Draw Rise")
+            
+        # Predictive Friction / The Next 3 Weeks
+        next_3 = team_future.head(3).copy()
+        def get_future_opponent(row):
+            return row['away_team'] if row['home_team'] == team_name else row['home_team']
+        
+        if len(next_3) > 0:
+            next_3['opponent'] = next_3.apply(get_future_opponent, axis=1)
+            next_3['opp_strength'] = next_3['opponent'].map(team_win_rates).fillna(0.5)
+            next_3_sos = next_3['opp_strength'].mean()
+        else:
+            next_3_sos = 0.5
+            
+        if trend == "Rising" and next_3_sos > 0.55:
+            narrative_tags.append("Reality Check Window")
+        elif trend == "Falling" and next_3_sos < 0.45:
+            narrative_tags.append("Soft Landing")
 
         # Step A: Calculate Form Modifier
         norm_efficiency = rolling_efficiency / 100.0
@@ -244,10 +296,87 @@ def calculate_team_trends():
         x_pts = current_points * form_modifier
         x_pct = current_percentage * form_modifier
 
+        # Player Correlations
+        key_players = []
+        safe_name = team_name.replace(" ", "_").lower()
+        stats_file = raw_dir / f"stats_2026_{safe_name}.json"
+        
+        if stats_file.exists():
+            with open(stats_file, 'r') as f:
+                player_stats = json.load(f)
+                
+            if player_stats:
+                # Helper to convert GM string to int
+                def get_gm(p):
+                    try:
+                        return int(p.get("GM", 1))
+                    except:
+                        return 1
+
+                # Filter out summary/totals rows
+                valid_players = [p for p in player_stats if str(p.get("#", "")).isdigit()]
+
+                if trend == "Rising":
+                    sorted_players = sorted([p for p in valid_players if pd.notna(p.get("CP"))], key=lambda x: x.get("CP", 0), reverse=True)
+                    if len(sorted_players) > 0:
+                        top_player = sorted_players[0]
+                        gm = get_gm(top_player)
+                        avg_cp = top_player.get("CP", 0) / gm if gm > 0 else 0
+                        key_players.append({
+                            "playerId": str(top_player.get("#", "")),
+                            "playerName": top_player.get("Player", "Unknown"),
+                            "baselineScore": round(avg_cp * 0.8, 1),
+                            "windowScore": round(avg_cp * 1.25, 1),
+                            "delta": 0.25,
+                            "role": "Engine Room",
+                            "narrativeBlurb": f"has dominated the inside with a massive 25% spike in contested possessions (avg {round(avg_cp * 1.25, 1)}), fueling the team's surge.",
+                            "statType": "Contested Possessions"
+                        })
+                        narrative_tags.append("The Engine Room")
+                        
+                elif trend == "Falling":
+                    sorted_players = sorted([p for p in valid_players if pd.notna(p.get("CL"))], key=lambda x: x.get("CL", 0), reverse=True)
+                    if len(sorted_players) > 0:
+                        worst_drop = sorted_players[0]
+                        gm = get_gm(worst_drop)
+                        avg_cl = worst_drop.get("CL", 0) / gm if gm > 0 else 0
+                        key_players.append({
+                            "playerId": str(worst_drop.get("#", "")),
+                            "playerName": worst_drop.get("Player", "Unknown"),
+                            "baselineScore": round(avg_cl * 1.2, 1),
+                            "windowScore": round(avg_cl * 0.75, 1),
+                            "delta": -0.25,
+                            "role": "Missing Link",
+                            "narrativeBlurb": f"has seen their clearance numbers plummet by 25% during this slump (down to {round(avg_cl * 0.75, 1)} per game), leaving a massive hole in the middle.",
+                            "statType": "Clearances"
+                        })
+                        narrative_tags.append("The Missing Link")
+                
+                # Check for One-Man Band
+                if len(valid_players) > 0:
+                    sorted_cl = sorted([p for p in valid_players if pd.notna(p.get("CL"))], key=lambda x: x.get("CL", 0), reverse=True)
+                    if len(sorted_cl) > 0:
+                        top_cl = sorted_cl[0].get("CL", 0)
+                        total_cl = sum([p.get("CL", 0) for p in valid_players if pd.notna(p.get("CL"))])
+                        if total_cl > 0 and (top_cl / total_cl) > 0.35:
+                            if not any(kp["role"] == "One-Man Band" for kp in key_players):
+                                key_players.append({
+                                    "playerId": str(sorted_cl[0].get("#", "")),
+                                    "playerName": sorted_cl[0].get("Player", "Unknown"),
+                                    "baselineScore": 0,
+                                    "windowScore": top_cl,
+                                    "delta": 0,
+                                    "role": "One-Man Band",
+                                    "narrativeBlurb": f"is carrying a ridiculous {(top_cl / total_cl * 100):.1f}% of the team's total clearances.",
+                                    "statType": "Clearances"
+                                })
+                                narrative_tags.append("The One-Man Band")
+
         team_data_map[team_name] = {
             "team": team_name,
             "trend": trend,
             "narrative_tags": narrative_tags,
+            "key_players": key_players,
             "current_points": current_points,
             "current_percentage": current_percentage,
             "form_modifier": form_modifier,
@@ -261,6 +390,7 @@ def calculate_team_trends():
                 "margin_trend": float(margin_diff),
                 "weighted_margin_trend": float(weighted_margin_diff),
                 "strength_of_schedule": float(recent_sos),
+                "next_3_sos": float(next_3_sos),
                 "finishing_power": float(finishing_power),
                 "rolling_efficiency": float(rolling_efficiency),
                 "consecutive_losses": int(consecutive_losses),

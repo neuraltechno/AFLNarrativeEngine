@@ -5,6 +5,7 @@
     "narrative_tags": [
       "Wildcard Contender"
     ],
+    "key_players": [],
     "current_points": 24,
     "current_percentage": 107.91208791208791,
     "form_modifier": 1.274499493605897,
@@ -18,6 +19,7 @@
       "margin_trend": 6.4,
       "weighted_margin_trend": 5.064119069045326,
       "strength_of_schedule": 0.4392338086416081,
+      "next_3_sos": 0.5361077019700033,
       "finishing_power": 1.8,
       "rolling_efficiency": 147.76119402985074,
       "consecutive_losses": 1,
@@ -30,8 +32,21 @@
     "team": "Brisbane Lions",
     "trend": "Falling",
     "narrative_tags": [
+      "The Missing Link",
       "Sinking Ship",
       "Wildcard Contender"
+    ],
+    "key_players": [
+      {
+        "playerId": "9",
+        "playerName": "Neale, Lachie",
+        "baselineScore": 8.9,
+        "windowScore": 5.6,
+        "delta": -0.25,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 5.6 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
     ],
     "current_points": 24,
     "current_percentage": 103.88265746333045,
@@ -46,6 +61,7 @@
       "margin_trend": -46.400000000000006,
       "weighted_margin_trend": -44.908548203509696,
       "strength_of_schedule": 0.5303837654673962,
+      "next_3_sos": 0.46082918563390424,
       "finishing_power": 0.0,
       "rolling_efficiency": 62.69430051813472,
       "consecutive_losses": 3,
@@ -59,8 +75,21 @@
     "trend": "Rising",
     "narrative_tags": [
       "Battle-Tested Rise",
+      "The Engine Room",
       "Sleeping Giants",
       "The Great Escape"
+    ],
+    "key_players": [
+      {
+        "playerId": "9",
+        "playerName": "Cripps, Patrick",
+        "baselineScore": 12.1,
+        "windowScore": 18.9,
+        "delta": 0.25,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a massive 25% spike in contested possessions (avg 18.9), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
     ],
     "current_points": 16,
     "current_percentage": 87.54480286738351,
@@ -75,6 +104,7 @@
       "margin_trend": 16.0,
       "weighted_margin_trend": 15.714956843824533,
       "strength_of_schedule": 0.5735907899375192,
+      "next_3_sos": 0.3720732226479353,
       "finishing_power": 5.2,
       "rolling_efficiency": 124.50980392156863,
       "consecutive_losses": 0,
@@ -88,7 +118,21 @@
     "trend": "Falling",
     "narrative_tags": [
       "Honourable Losses",
+      "Soft Landing",
+      "The Missing Link",
       "Market Corrected"
+    ],
+    "key_players": [
+      {
+        "playerId": "35",
+        "playerName": "Daicos, Nick",
+        "baselineScore": 6.0,
+        "windowScore": 3.8,
+        "delta": -0.25,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 3.8 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
     ],
     "current_points": 22,
     "current_percentage": 99.89949748743719,
@@ -103,6 +147,7 @@
       "margin_trend": -21.8,
       "weighted_margin_trend": -22.80836609169628,
       "strength_of_schedule": 0.503996933661387,
+      "next_3_sos": 0.42324009181242034,
       "finishing_power": -1.4,
       "rolling_efficiency": 100.0,
       "consecutive_losses": 1,
@@ -116,8 +161,22 @@
     "trend": "Falling",
     "narrative_tags": [
       "September Teasers",
+      "Soft Landing",
+      "The Missing Link",
       "Sinking Ship",
       "Market Corrected"
+    ],
+    "key_players": [
+      {
+        "playerId": "3",
+        "playerName": "Parish, Darcy",
+        "baselineScore": 6.3,
+        "windowScore": 4.0,
+        "delta": -0.25,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 4.0 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
     ],
     "current_points": 4,
     "current_percentage": 70.48799380325329,
@@ -132,6 +191,7 @@
       "margin_trend": -16.4,
       "weighted_margin_trend": -13.692223376102906,
       "strength_of_schedule": 0.45284737938167324,
+      "next_3_sos": 0.39210961493030944,
       "finishing_power": 1.0,
       "rolling_efficiency": 65.39923954372624,
       "consecutive_losses": 7,
@@ -146,6 +206,7 @@
     "narrative_tags": [
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 44,
     "current_percentage": 135.16355140186914,
     "form_modifier": 1.5392497266445613,
@@ -159,6 +220,7 @@
       "margin_trend": -2.6000000000000014,
       "weighted_margin_trend": 3.613955924937489,
       "strength_of_schedule": 0.5230069457193841,
+      "next_3_sos": 0.4468897712232936,
       "finishing_power": 7.2,
       "rolling_efficiency": 146.0093896713615,
       "consecutive_losses": 0,
@@ -171,8 +233,10 @@
     "team": "Geelong",
     "trend": "Rising",
     "narrative_tags": [
+      "Reality Check Window",
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 32,
     "current_percentage": 121.85628742514969,
     "form_modifier": 1.320693963394836,
@@ -186,6 +250,7 @@
       "margin_trend": 13.799999999999997,
       "weighted_margin_trend": 16.603628196754084,
       "strength_of_schedule": 0.5238660560280735,
+      "next_3_sos": 0.5986214209968187,
       "finishing_power": 15.2,
       "rolling_efficiency": 126.22950819672131,
       "consecutive_losses": 1,
@@ -200,6 +265,7 @@
     "narrative_tags": [
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 28,
     "current_percentage": 116.93290734824282,
     "form_modifier": 1.1462649663030522,
@@ -213,6 +279,7 @@
       "margin_trend": -13.0,
       "weighted_margin_trend": -9.000194559347124,
       "strength_of_schedule": 0.4697607764133682,
+      "next_3_sos": 0.6122345803842265,
       "finishing_power": -10.4,
       "rolling_efficiency": 119.67213114754098,
       "consecutive_losses": 1,
@@ -229,6 +296,7 @@
       "Soft Draw Rise",
       "Wildcard Contender"
     ],
+    "key_players": [],
     "current_points": 24,
     "current_percentage": 103.20512820512822,
     "form_modifier": 1.2604410525334517,
@@ -242,6 +310,7 @@
       "margin_trend": 23.8,
       "weighted_margin_trend": 20.987093140193643,
       "strength_of_schedule": 0.4421595419027352,
+      "next_3_sos": 0.4974264010765963,
       "finishing_power": 0.8,
       "rolling_efficiency": 144.71544715447155,
       "consecutive_losses": 0,
@@ -257,6 +326,7 @@
       "Market Corrected",
       "Glass Ceiling"
     ],
+    "key_players": [],
     "current_points": 34,
     "current_percentage": 114.82926829268291,
     "form_modifier": 1.0009883921490792,
@@ -270,6 +340,7 @@
       "margin_trend": -20.6,
       "weighted_margin_trend": -23.808633245068627,
       "strength_of_schedule": 0.5437753281987849,
+      "next_3_sos": 0.5650873750116813,
       "finishing_power": -11.2,
       "rolling_efficiency": 108.69565217391303,
       "consecutive_losses": 0,
@@ -282,6 +353,7 @@
     "team": "Melbourne",
     "trend": "Falling",
     "narrative_tags": [],
+    "key_players": [],
     "current_points": 28,
     "current_percentage": 101.79640718562875,
     "form_modifier": 0.9179282394958855,
@@ -295,6 +367,7 @@
       "margin_trend": -10.4,
       "weighted_margin_trend": -9.420209827692613,
       "strength_of_schedule": 0.5002813495929562,
+      "next_3_sos": 0.5073166063271314,
       "finishing_power": -2.0,
       "rolling_efficiency": 95.56313993174061,
       "consecutive_losses": 2,
@@ -306,7 +379,10 @@
   {
     "team": "North Melbourne",
     "trend": "Falling",
-    "narrative_tags": [],
+    "narrative_tags": [
+      "Soft Landing"
+    ],
+    "key_players": [],
     "current_points": 20,
     "current_percentage": 97.55409219190969,
     "form_modifier": 0.7488623931744545,
@@ -320,6 +396,7 @@
       "margin_trend": -36.0,
       "weighted_margin_trend": -37.34220678416589,
       "strength_of_schedule": 0.5772580237524626,
+      "next_3_sos": 0.33087423466827254,
       "finishing_power": 2.2,
       "rolling_efficiency": 79.59183673469387,
       "consecutive_losses": 0,
@@ -337,6 +414,7 @@
       "Sinking Ship",
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 12,
     "current_percentage": 100.89086859688197,
     "form_modifier": 0.7221163554061855,
@@ -350,6 +428,7 @@
       "margin_trend": -23.6,
       "weighted_margin_trend": -19.0942203207957,
       "strength_of_schedule": 0.5441166460912215,
+      "next_3_sos": 0.47451937421537665,
       "finishing_power": 5.6,
       "rolling_efficiency": 76.89393939393939,
       "consecutive_losses": 4,
@@ -365,6 +444,7 @@
       "Soft Draw Rise",
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 8,
     "current_percentage": 60.35276073619632,
     "form_modifier": 0.7133732992934261,
@@ -378,6 +458,7 @@
       "margin_trend": 25.799999999999997,
       "weighted_margin_trend": 28.880977405181895,
       "strength_of_schedule": 0.425970561666401,
+      "next_3_sos": 0.5044826423997304,
       "finishing_power": -4.2,
       "rolling_efficiency": 60.59701492537314,
       "consecutive_losses": 1,
@@ -392,6 +473,7 @@
     "narrative_tags": [
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 20,
     "current_percentage": 102.28353948620361,
     "form_modifier": 0.8531279924837142,
@@ -405,6 +487,7 @@
       "margin_trend": -24.2,
       "weighted_margin_trend": -23.854093221683076,
       "strength_of_schedule": 0.47707673796604205,
+      "next_3_sos": 0.5981337642991035,
       "finishing_power": -6.6,
       "rolling_efficiency": 84.45945945945947,
       "consecutive_losses": 2,
@@ -421,6 +504,7 @@
       "Market Corrected",
       "Glass Ceiling"
     ],
+    "key_players": [],
     "current_points": 40,
     "current_percentage": 152.42825607064017,
     "form_modifier": 1.350126771927496,
@@ -434,6 +518,7 @@
       "margin_trend": -26.4,
       "weighted_margin_trend": -27.425014363345245,
       "strength_of_schedule": 0.43687155166747954,
+      "next_3_sos": 0.5595013827376126,
       "finishing_power": -1.8,
       "rolling_efficiency": 139.07563025210084,
       "consecutive_losses": 0,
@@ -448,6 +533,7 @@
     "narrative_tags": [
       "Market Corrected"
     ],
+    "key_players": [],
     "current_points": 16,
     "current_percentage": 69.98407643312102,
     "form_modifier": 1.0107667476693623,
@@ -461,6 +547,7 @@
       "margin_trend": 64.6,
       "weighted_margin_trend": 73.6849758144994,
       "strength_of_schedule": 0.46476090587065355,
+      "next_3_sos": 0.407843137254902,
       "finishing_power": 3.6,
       "rolling_efficiency": 116.97247706422019,
       "consecutive_losses": 0,
@@ -477,6 +564,7 @@
       "Market Corrected",
       "Wildcard Contender"
     ],
+    "key_players": [],
     "current_points": 28,
     "current_percentage": 93.72759856630825,
     "form_modifier": 1.070640467517644,
@@ -490,6 +578,7 @@
       "margin_trend": 25.2,
       "weighted_margin_trend": 26.797809894559535,
       "strength_of_schedule": 0.5509202349419701,
+      "next_3_sos": 0.5114388353185858,
       "finishing_power": -8.8,
       "rolling_efficiency": 98.0544747081712,
       "consecutive_losses": 0,

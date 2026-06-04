@@ -76,6 +76,12 @@ Finds historical AFL teams most similar to a current team.
 
 Identifies emerging players.
 
+### Player-Team Trend Correlation
+
+Links team performance trends to individual player output over a 3-5 game window using pure pyAFL statistics (e.g., Clearances, Contested Possessions, Inside 50s, Score Involvements). Explicitly excludes AFL Fantasy or Supercoach points.
+*   **The Engine Room**: Highlights 1-2 players whose statistical output has spiked during a team's Rising trend.
+*   **The Missing Link**: Identifies a key player whose statistical drop-off mirrors a team's Falling trend.
+
 ### Round Narrative
 
 Generates key stories from each round.
@@ -142,6 +148,8 @@ To make the insights highly relatable and cheeky, the engine uses dynamic narrat
 *   **"The One-Man Band"**: A single player accounts for > 35% of the team's total Clearances or Inside 50s over a 3-week rolling average.
 *   **"Traffic Cones"**: Extremely low Tackles Inside 50 + high Opposition Inside 50s + high Opposition scoring efficiency per Inside 50.
 *   **"September Teasers" (or "Peaking Too Early")**: Unbeaten or high win rate in the first 8-10 rounds, followed by a sharp negative trend line (3+ consecutive losses) in the back half of the season.
+*   **"The Engine Room"**: A team is on a "Rising" trend and a specific player's pure stats (e.g., Clearances, Contested Possessions) have spiked > 20% over a 3-week window.
+*   **"The Missing Link"**: A team is on a "Falling" trend and a key player's pure stats have dropped significantly (> 20%) over the exact same window.
 
 ### Implementation Concept
 

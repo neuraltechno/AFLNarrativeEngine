@@ -2,10 +2,22 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 
+export interface PlayerFormImpact {
+  playerId: string;
+  playerName: string;
+  baselineScore: number;
+  windowScore: number;
+  delta: number;
+  role: 'Engine Room' | 'Missing Link' | 'One-Man Band';
+  narrativeBlurb: string;
+  statType: string;
+}
+
 interface TeamTrend {
   team: string;
   trend: 'Rising' | 'Stable' | 'Falling';
   narrative_tags?: string[];
+  key_players?: PlayerFormImpact[];
   current_ladder_position?: number;
   expected_ladder_position?: number;
   supporting_metrics: {
@@ -16,6 +28,7 @@ interface TeamTrend {
     margin_trend: number;
     weighted_margin_trend?: number;
     strength_of_schedule?: number;
+    next_3_sos?: number;
     finishing_power?: number;
     rolling_efficiency?: number;
     games_analyzed: number;
@@ -231,6 +244,51 @@ export default async function TeamsPage() {
                 </div>
               )}
             </div>
+
+            {team.supporting_metrics.next_3_sos !== undefined && (
+              <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-2">
+                  The Next 3 Weeks
+                </h4>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-zinc-600 dark:text-zinc-400">Upcoming SoS:</span>
+                  <span className={`font-semibold ${team.supporting_metrics.next_3_sos > 0.55 ? 'text-red-600 dark:text-red-400' : team.supporting_metrics.next_3_sos < 0.45 ? 'text-green-600 dark:text-green-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                    {(team.supporting_metrics.next_3_sos * 100).toFixed(0)}%
+                  </span>
+                </div>
+                {team.narrative_tags?.includes("Reality Check Window") && (
+                  <div className="mt-2 text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1 bg-red-50 dark:bg-red-900/10 p-1.5 rounded">
+                    <span>⚠️</span> Reality Check Window
+                  </div>
+                )}
+                {team.narrative_tags?.includes("Soft Landing") && (
+                  <div className="mt-2 text-xs font-bold text-green-600 dark:text-green-400 flex items-center gap-1 bg-green-50 dark:bg-green-900/10 p-1.5 rounded">
+                    <span>🪂</span> Soft Landing
+                  </div>
+                )}
+                
+                {team.key_players && team.key_players.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {team.key_players.map((kp, idx) => (
+                      <div key={idx} className={`p-2 rounded text-xs border ${
+                        kp.role === 'Engine Room' ? 'bg-green-50/50 border-green-200 dark:bg-green-900/20 dark:border-green-800' :
+                        kp.role === 'Missing Link' ? 'bg-red-50/50 border-red-200 dark:bg-red-900/20 dark:border-red-800' :
+                        'bg-amber-50/50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800'
+                      }`}>
+                        <div className="flex items-center gap-1.5 font-bold mb-1">
+                          {kp.role === 'Engine Room' && <span className="text-green-600 dark:text-green-400">🚂 The Engine Room</span>}
+                          {kp.role === 'Missing Link' && <span className="text-red-600 dark:text-red-400">👻 The Missing Link</span>}
+                          {kp.role === 'One-Man Band' && <span className="text-amber-600 dark:text-amber-400">🎸 The One-Man Band</span>}
+                        </div>
+                        <p className="text-zinc-600 dark:text-zinc-300">
+                          <strong>{kp.playerName}</strong> {kp.narrativeBlurb}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -274,6 +332,10 @@ export default async function TeamsPage() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400">Average win rate of recent opponents. We weight margin trends based on SoS so that beating top teams counts more than beating bottom teams.</p>
           </div>
           <div>
+            <strong className="text-zinc-900 dark:text-zinc-100 block mb-1 text-xs uppercase tracking-wider">The Next 3 Weeks</strong>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">Projects form against the upcoming fixture. If a rising team faces a brutal draw, it triggers a <strong>Reality Check Window</strong>. If a falling team gets an easy draw, it&apos;s a <strong>Soft Landing</strong>.</p>
+          </div>
+          <div>
             <strong className="text-zinc-900 dark:text-zinc-100 block mb-1 text-xs uppercase tracking-wider">Finishing Power (Q4)</strong>
             <p className="text-xs text-zinc-600 dark:text-zinc-400">The net 4th-quarter score margin over the last 5 games. A positive trend indicates strong late-game structure, while a drop indicates late-game fatigue.</p>
           </div>
@@ -302,6 +364,8 @@ export default async function TeamsPage() {
               <li><strong className="text-zinc-900 dark:text-zinc-100">September Teasers:</strong> Flying early, crying late. Peaked way too early in the season.</li>
               <li><strong className="text-zinc-900 dark:text-zinc-100">Battle-Tested Rise:</strong> Form improvement against tough opponents.</li>
               <li><strong className="text-zinc-900 dark:text-zinc-100">Soft Draw Rise:</strong> Form improvement against weaker opponents.</li>
+              <li><strong className="text-zinc-900 dark:text-zinc-100">Reality Check Window:</strong> Rising trend but facing a brutal upcoming draw.</li>
+              <li><strong className="text-zinc-900 dark:text-zinc-100">Soft Landing:</strong> Falling trend but a much easier upcoming draw offers hope.</li>
               <li><strong className="text-zinc-900 dark:text-zinc-100">Paper Tigers:</strong> Ladder position higher than expected.</li>
               <li><strong className="text-zinc-900 dark:text-zinc-100">Sleeping Giants:</strong> Ladder position lower than expected.</li>
               <li><strong className="text-zinc-900 dark:text-zinc-100">Market Corrected:</strong> Ladder position matches expected performance.</li>

@@ -1,3 +1,14 @@
+export type PlayerFormImpact = {
+  playerId: string;
+  playerName: string;
+  baselineScore: number;
+  windowScore: number;
+  delta: number;
+  role: 'Engine Room' | 'Missing Link' | 'One-Man Band' | 'None';
+  narrativeBlurb: string;
+  statType: 'Clearances' | 'Contested Possessions' | 'Inside 50s' | 'Score Involvements' | 'General';
+};
+
 export type TeamStatsContext = {
   // General Win/Loss
   winRate: number; // 0.0 to 1.0
@@ -9,6 +20,12 @@ export type TeamStatsContext = {
   expectedLadderPositionDiff: number; // e.g., Actual Ladder - Expected Ladder (negative means underperforming)
   recentTrend: 'rising' | 'falling' | 'stable';
   roundNumber: number;
+
+  // Player Impact (Player-Team Trend Correlation)
+  topPlayerDelta?: number; // E.g., > 0.20 for 20% spike
+  worstPlayerDelta?: number; // E.g., < -0.20 for 20% drop
+  maxPlayerStatShare?: number; // E.g. 0.36 for 36% of team's clearances
+  keyPlayers?: PlayerFormImpact[];
 
   // Scoring & Quarters
   averageScore: number;
@@ -110,6 +127,27 @@ export const TEAM_NARRATIVE_TAGS: NarrativeTag[] = [
     description: 'Flying early, crying late. Peaked way too early in the season.',
     type: 'negative',
     condition: (stats) => stats.roundNumber >= 15 && stats.winRate > 0.5 && stats.consecutiveLosses >= 3,
+  },
+  {
+    id: 'one-man-band',
+    label: 'The One-Man Band',
+    description: 'A single player is carrying the entire load for clearances or inside 50s.',
+    type: 'neutral',
+    condition: (stats) => (stats.maxPlayerStatShare ?? 0) > 0.35,
+  },
+  {
+    id: 'engine-room',
+    label: 'The Engine Room',
+    description: 'Team is surging, driven by a massive individual form spike.',
+    type: 'positive',
+    condition: (stats) => stats.recentTrend === 'rising' && (stats.topPlayerDelta ?? 0) > 0.20,
+  },
+  {
+    id: 'missing-link',
+    label: 'The Missing Link',
+    description: 'Team form is plummeting, perfectly correlating with a key player dropping off a cliff.',
+    type: 'negative',
+    condition: (stats) => stats.recentTrend === 'falling' && (stats.worstPlayerDelta ?? 0) < -0.20,
   }
 ];
 

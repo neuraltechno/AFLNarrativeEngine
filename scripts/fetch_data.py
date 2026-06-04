@@ -42,6 +42,17 @@ def main():
         save_json(teams, 'teams.json')
     except Exception as e:
         print(f"Error fetching teams: {e}")
+        
+    print("Fetching fixtures from Squiggle API...")
+    try:
+        import urllib.request
+        url = 'https://api.squiggle.com.au/?q=games;year=2026'
+        req = urllib.request.Request(url, headers={'User-Agent': 'AFL Narrative Engine'})
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+            save_json(data['games'], 'fixture_2026.json')
+    except Exception as e:
+        print(f"Error fetching fixtures: {e}")
     
     # Use 2023, 2024, 2025, 2026
     years = [2023, 2024, 2025, 2026]
