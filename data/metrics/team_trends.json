@@ -3,8 +3,13 @@
     "team": "Adelaide",
     "trend": "Stable",
     "narrative_tags": [
-      "Highly Efficient"
+      "Wildcard Contender"
     ],
+    "current_points": 24,
+    "current_percentage": 107.91208791208791,
+    "form_modifier": 1.274499493605897,
+    "x_pts": 30.58798784654153,
+    "x_pct": 137.53390139791108,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 9.0,
@@ -15,15 +20,24 @@
       "strength_of_schedule": 0.4392338086416081,
       "finishing_power": 1.8,
       "rolling_efficiency": 147.76119402985074,
+      "consecutive_losses": 1,
       "games_analyzed": 82
-    }
+    },
+    "current_ladder_position": 8,
+    "expected_ladder_position": 6
   },
   {
     "team": "Brisbane Lions",
     "trend": "Falling",
     "narrative_tags": [
-      "Struggling to Convert"
+      "Sinking Ship",
+      "Wildcard Contender"
     ],
+    "current_points": 24,
+    "current_percentage": 103.88265746333045,
+    "form_modifier": 0.7656250087776321,
+    "x_pts": 18.37500021066317,
+    "x_pct": 79.53516053220612,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -13.8,
@@ -34,15 +48,25 @@
       "strength_of_schedule": 0.5303837654673962,
       "finishing_power": 0.0,
       "rolling_efficiency": 62.69430051813472,
+      "consecutive_losses": 3,
       "games_analyzed": 92
-    }
+    },
+    "current_ladder_position": 9,
+    "expected_ladder_position": 11
   },
   {
     "team": "Carlton",
     "trend": "Rising",
     "narrative_tags": [
-      "Battle-Tested Rise"
+      "Battle-Tested Rise",
+      "Sleeping Giants",
+      "The Great Escape"
     ],
+    "current_points": 16,
+    "current_percentage": 87.54480286738351,
+    "form_modifier": 1.2119853355828507,
+    "x_pts": 19.39176536932561,
+    "x_pct": 106.10301728176032,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 0.0,
@@ -53,13 +77,24 @@
       "strength_of_schedule": 0.5735907899375192,
       "finishing_power": 5.2,
       "rolling_efficiency": 124.50980392156863,
+      "consecutive_losses": 0,
       "games_analyzed": 85
-    }
+    },
+    "current_ladder_position": 14,
+    "expected_ladder_position": 10
   },
   {
     "team": "Collingwood",
     "trend": "Falling",
-    "narrative_tags": [],
+    "narrative_tags": [
+      "Honourable Losses",
+      "Market Corrected"
+    ],
+    "current_points": 22,
+    "current_percentage": 99.89949748743719,
+    "form_modifier": 0.8215987734645548,
+    "x_pts": 18.075173016220205,
+    "x_pct": 82.07730460540377,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -10.8,
@@ -70,15 +105,25 @@
       "strength_of_schedule": 0.503996933661387,
       "finishing_power": -1.4,
       "rolling_efficiency": 100.0,
+      "consecutive_losses": 1,
       "games_analyzed": 86
-    }
+    },
+    "current_ladder_position": 11,
+    "expected_ladder_position": 12
   },
   {
     "team": "Essendon",
     "trend": "Falling",
     "narrative_tags": [
-      "Struggling to Convert"
+      "September Teasers",
+      "Sinking Ship",
+      "Market Corrected"
     ],
+    "current_points": 4,
+    "current_percentage": 70.48799380325329,
+    "form_modifier": 0.5081351494713005,
+    "x_pts": 2.032540597885202,
+    "x_pct": 35.81742726714821,
     "supporting_metrics": {
       "recent_win_rate": 0.0,
       "recent_avg_margin": -33.8,
@@ -89,15 +134,23 @@
       "strength_of_schedule": 0.45284737938167324,
       "finishing_power": 1.0,
       "rolling_efficiency": 65.39923954372624,
+      "consecutive_losses": 7,
       "games_analyzed": 81
-    }
+    },
+    "current_ladder_position": 18,
+    "expected_ladder_position": 18
   },
   {
     "team": "Fremantle",
     "trend": "Stable",
     "narrative_tags": [
-      "Highly Efficient"
+      "Market Corrected"
     ],
+    "current_points": 44,
+    "current_percentage": 135.16355140186914,
+    "form_modifier": 1.5392497266445613,
+    "x_pts": 67.72698797236069,
+    "x_pct": 208.05045954763517,
     "supporting_metrics": {
       "recent_win_rate": 1.0,
       "recent_avg_margin": 25.0,
@@ -108,15 +161,23 @@
       "strength_of_schedule": 0.5230069457193841,
       "finishing_power": 7.2,
       "rolling_efficiency": 146.0093896713615,
+      "consecutive_losses": 0,
       "games_analyzed": 82
-    }
+    },
+    "current_ladder_position": 1,
+    "expected_ladder_position": 1
   },
   {
     "team": "Geelong",
     "trend": "Rising",
     "narrative_tags": [
-      "Elite 4th Quarter"
+      "Market Corrected"
     ],
+    "current_points": 32,
+    "current_percentage": 121.85628742514969,
+    "form_modifier": 1.320693963394836,
+    "x_pts": 42.26220682863475,
+    "x_pct": 160.93486320410125,
     "supporting_metrics": {
       "recent_win_rate": 0.8,
       "recent_avg_margin": 33.4,
@@ -127,15 +188,23 @@
       "strength_of_schedule": 0.5238660560280735,
       "finishing_power": 15.2,
       "rolling_efficiency": 126.22950819672131,
+      "consecutive_losses": 1,
       "games_analyzed": 86
-    }
+    },
+    "current_ladder_position": 4,
+    "expected_ladder_position": 3
   },
   {
     "team": "Gold Coast",
     "trend": "Stable",
     "narrative_tags": [
-      "Late Game Fade"
+      "Market Corrected"
     ],
+    "current_points": 28,
+    "current_percentage": 116.93290734824282,
+    "form_modifier": 1.1462649663030522,
+    "x_pts": 32.09541905648546,
+    "x_pct": 134.03609510125148,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 3.8,
@@ -146,16 +215,25 @@
       "strength_of_schedule": 0.4697607764133682,
       "finishing_power": -10.4,
       "rolling_efficiency": 119.67213114754098,
+      "consecutive_losses": 1,
       "games_analyzed": 82
-    }
+    },
+    "current_ladder_position": 5,
+    "expected_ladder_position": 5
   },
   {
     "team": "Greater Western Sydney",
     "trend": "Rising",
     "narrative_tags": [
-      "Highly Efficient",
-      "Soft Draw Rise"
+      "Premiership Quarter Specialists",
+      "Soft Draw Rise",
+      "Wildcard Contender"
     ],
+    "current_points": 24,
+    "current_percentage": 103.20512820512822,
+    "form_modifier": 1.2604410525334517,
+    "x_pts": 30.250585260802843,
+    "x_pct": 130.08398042172163,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 20.8,
@@ -166,15 +244,24 @@
       "strength_of_schedule": 0.4421595419027352,
       "finishing_power": 0.8,
       "rolling_efficiency": 144.71544715447155,
+      "consecutive_losses": 0,
       "games_analyzed": 87
-    }
+    },
+    "current_ladder_position": 10,
+    "expected_ladder_position": 7
   },
   {
     "team": "Hawthorn",
     "trend": "Falling",
     "narrative_tags": [
-      "Late Game Fade"
+      "Market Corrected",
+      "Glass Ceiling"
     ],
+    "current_points": 34,
+    "current_percentage": 114.82926829268291,
+    "form_modifier": 1.0009883921490792,
+    "x_pts": 34.03360533306869,
+    "x_pct": 114.94276463994791,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": 1.4,
@@ -185,13 +272,21 @@
       "strength_of_schedule": 0.5437753281987849,
       "finishing_power": -11.2,
       "rolling_efficiency": 108.69565217391303,
+      "consecutive_losses": 0,
       "games_analyzed": 86
-    }
+    },
+    "current_ladder_position": 3,
+    "expected_ladder_position": 4
   },
   {
     "team": "Melbourne",
     "trend": "Falling",
     "narrative_tags": [],
+    "current_points": 28,
+    "current_percentage": 101.79640718562875,
+    "form_modifier": 0.9179282394958855,
+    "x_pts": 25.701990705884796,
+    "x_pct": 93.4417968349105,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": 0.4,
@@ -202,13 +297,21 @@
       "strength_of_schedule": 0.5002813495929562,
       "finishing_power": -2.0,
       "rolling_efficiency": 95.56313993174061,
+      "consecutive_losses": 2,
       "games_analyzed": 83
-    }
+    },
+    "current_ladder_position": 6,
+    "expected_ladder_position": 9
   },
   {
     "team": "North Melbourne",
     "trend": "Falling",
     "narrative_tags": [],
+    "current_points": 20,
+    "current_percentage": 97.55409219190969,
+    "form_modifier": 0.7488623931744545,
+    "x_pts": 14.97724786348909,
+    "x_pct": 73.05459094279485,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -25.2,
@@ -219,13 +322,26 @@
       "strength_of_schedule": 0.5772580237524626,
       "finishing_power": 2.2,
       "rolling_efficiency": 79.59183673469387,
+      "consecutive_losses": 0,
       "games_analyzed": 80
-    }
+    },
+    "current_ladder_position": 13,
+    "expected_ladder_position": 15
   },
   {
     "team": "Port Adelaide",
     "trend": "Falling",
-    "narrative_tags": [],
+    "narrative_tags": [
+      "Honourable Losses",
+      "September Teasers",
+      "Sinking Ship",
+      "Market Corrected"
+    ],
+    "current_points": 12,
+    "current_percentage": 100.89086859688197,
+    "form_modifier": 0.7221163554061855,
+    "x_pts": 8.665396264874225,
+    "x_pct": 72.85494632494478,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -6.4,
@@ -236,16 +352,24 @@
       "strength_of_schedule": 0.5441166460912215,
       "finishing_power": 5.6,
       "rolling_efficiency": 76.89393939393939,
+      "consecutive_losses": 4,
       "games_analyzed": 85
-    }
+    },
+    "current_ladder_position": 16,
+    "expected_ladder_position": 16
   },
   {
     "team": "Richmond",
     "trend": "Rising",
     "narrative_tags": [
-      "Struggling to Convert",
-      "Soft Draw Rise"
+      "Soft Draw Rise",
+      "Market Corrected"
     ],
+    "current_points": 8,
+    "current_percentage": 60.35276073619632,
+    "form_modifier": 0.7133732992934261,
+    "x_pts": 5.706986394347409,
+    "x_pct": 43.05404804784711,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -31.6,
@@ -256,13 +380,23 @@
       "strength_of_schedule": 0.425970561666401,
       "finishing_power": -4.2,
       "rolling_efficiency": 60.59701492537314,
+      "consecutive_losses": 1,
       "games_analyzed": 81
-    }
+    },
+    "current_ladder_position": 17,
+    "expected_ladder_position": 17
   },
   {
     "team": "St Kilda",
     "trend": "Falling",
-    "narrative_tags": [],
+    "narrative_tags": [
+      "Market Corrected"
+    ],
+    "current_points": 20,
+    "current_percentage": 102.28353948620361,
+    "form_modifier": 0.8531279924837142,
+    "x_pts": 17.062559849674283,
+    "x_pct": 87.2609507059936,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -7.2,
@@ -273,15 +407,25 @@
       "strength_of_schedule": 0.47707673796604205,
       "finishing_power": -6.6,
       "rolling_efficiency": 84.45945945945947,
+      "consecutive_losses": 2,
       "games_analyzed": 82
-    }
+    },
+    "current_ladder_position": 12,
+    "expected_ladder_position": 13
   },
   {
     "team": "Sydney",
     "trend": "Falling",
     "narrative_tags": [
-      "Highly Efficient"
+      "Premiership Quarter Specialists",
+      "Market Corrected",
+      "Glass Ceiling"
     ],
+    "current_points": 40,
+    "current_percentage": 152.42825607064017,
+    "form_modifier": 1.350126771927496,
+    "x_pts": 54.00507087709984,
+    "x_pct": 205.79746931919118,
     "supporting_metrics": {
       "recent_win_rate": 0.8,
       "recent_avg_margin": 23.6,
@@ -292,13 +436,23 @@
       "strength_of_schedule": 0.43687155166747954,
       "finishing_power": -1.8,
       "rolling_efficiency": 139.07563025210084,
+      "consecutive_losses": 0,
       "games_analyzed": 85
-    }
+    },
+    "current_ladder_position": 2,
+    "expected_ladder_position": 2
   },
   {
     "team": "West Coast",
     "trend": "Rising",
-    "narrative_tags": [],
+    "narrative_tags": [
+      "Market Corrected"
+    ],
+    "current_points": 16,
+    "current_percentage": 69.98407643312102,
+    "form_modifier": 1.0107667476693623,
+    "x_pts": 16.172267962709796,
+    "x_pct": 70.7375773249498,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -1.2,
@@ -309,15 +463,25 @@
       "strength_of_schedule": 0.46476090587065355,
       "finishing_power": 3.6,
       "rolling_efficiency": 116.97247706422019,
+      "consecutive_losses": 0,
       "games_analyzed": 81
-    }
+    },
+    "current_ladder_position": 15,
+    "expected_ladder_position": 14
   },
   {
     "team": "Western Bulldogs",
     "trend": "Rising",
     "narrative_tags": [
-      "Battle-Tested Rise"
+      "Battle-Tested Rise",
+      "Market Corrected",
+      "Wildcard Contender"
     ],
+    "current_points": 28,
+    "current_percentage": 93.72759856630825,
+    "form_modifier": 1.070640467517644,
+    "x_pts": 29.97793309049403,
+    "x_pct": 100.34855994833832,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": -3.0,
@@ -328,7 +492,10 @@
       "strength_of_schedule": 0.5509202349419701,
       "finishing_power": -8.8,
       "rolling_efficiency": 98.0544747081712,
+      "consecutive_losses": 0,
       "games_analyzed": 82
-    }
+    },
+    "current_ladder_position": 7,
+    "expected_ladder_position": 8
   }
 ]

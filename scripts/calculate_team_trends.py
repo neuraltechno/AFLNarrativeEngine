@@ -58,7 +58,8 @@ def calculate_team_trends():
         else:
             team_win_rates[t_name] = 0.5
 
-    results = []
+    # Pass 1: Calculate metrics and current ladder for all teams
+    team_data_map = {}
     
     for team_obj in teams:
         team_name = team_obj['name']
@@ -70,14 +71,19 @@ def calculate_team_trends():
         ].copy()
         
         if len(team_matches) < 5:
-            results.append({
+            team_data_map[team_name] = {
                 "team": team_name,
                 "trend": "Stable",
                 "supporting_metrics": {
                     "reason": "Insufficient data",
                     "games_played": len(team_matches)
-                }
-            })
+                },
+                "current_points": 0,
+                "current_percentage": 100,
+                "form_modifier": 1.0,
+                "x_pts": 0,
+                "x_pct": 100
+            }
             continue
             
         # Add team-specific stats to each match
@@ -97,32 +103,49 @@ def calculate_team_trends():
         team_matches['opponent'] = team_matches.apply(get_opponent, axis=1)
         team_matches['opp_strength'] = team_matches['opponent'].map(team_win_rates)
         
-        def calculate_q4_margin(row):
+        def calculate_quarter_margins(row):
             is_home = row['home_team'] == team_name
-            # Score details are cumulative: [Q1_G, Q1_B, Q2_G, Q2_B, Q3_G, Q3_B, Q4_G, Q4_B]
-            # No, wait, they are: [Q1_pts, Q2_pts, Q3_pts, Q4_pts] based on the JSON
-            # Ah, the JSON has 8 items: e.g., 3, 3, 4, 3, 7, 10, 12, 14
-            # This looks like [Q1_G, Q1_B, Q2_G, Q2_B, Q3_G, Q3_B, Q4_G, Q4_B]
-            # So Q4 total points = (Q4_G * 6 + Q4_B) - (Q3_G * 6 + Q3_B)
             try:
                 team_detail = row['Home team score detail'] if is_home else row['Away team score detail']
                 opp_detail = row['Away team score detail'] if is_home else row['Home team score detail']
                 
-                team_q4_pts = (team_detail[6] * 6 + team_detail[7]) - (team_detail[4] * 6 + team_detail[5])
-                opp_q4_pts = (opp_detail[6] * 6 + opp_detail[7]) - (opp_detail[4] * 6 + opp_detail[5])
-                return team_q4_pts - opp_q4_pts
+                t_q1 = team_detail[0] * 6 + team_detail[1]
+                t_q2 = team_detail[2] * 6 + team_detail[3]
+                t_q3 = team_detail[4] * 6 + team_detail[5]
+                t_q4 = team_detail[6] * 6 + team_detail[7]
+                
+                o_q1 = opp_detail[0] * 6 + opp_detail[1]
+                o_q2 = opp_detail[2] * 6 + opp_detail[3]
+                o_q3 = opp_detail[4] * 6 + opp_detail[5]
+                o_q4 = opp_detail[6] * 6 + opp_detail[7]
+                
+                return pd.Series([
+                    t_q1 - o_q1,
+                    (t_q2 - t_q1) - (o_q2 - o_q1),
+                    (t_q3 - t_q2) - (o_q3 - o_q2),
+                    (t_q4 - t_q3) - (o_q4 - o_q3)
+                ])
             except (KeyError, TypeError, IndexError):
-                return 0
+                return pd.Series([0, 0, 0, 0])
         
-        team_matches['q4_margin'] = team_matches.apply(calculate_q4_margin, axis=1)
+        team_matches[['q1_margin', 'q2_margin', 'q3_margin', 'q4_margin']] = team_matches.apply(calculate_quarter_margins, axis=1)
 
-        # Load team specific micro-stats (from fetch_data.py updates)
-        safe_name = team_name.replace(" ", "_").lower()
-        stats_files = list(raw_dir.glob(f'stats_*_{safe_name}.json'))
+        # Calculate current season (2026) ladder for the team
+        team_matches_current = team_matches[team_matches['date'].dt.year == 2026]
         
-        # We need a way to aggregate CP and T per match, but the raw stats files only contain season totals for each player.
-        # So we can't do per-match CP/T aggregation accurately with just the season totals.
-        # We will focus on Finishing Power and Rolling Efficiency.
+        current_points = 0
+        current_pts_for = 0
+        current_pts_against = 0
+        
+        for _, row in team_matches_current.iterrows():
+            current_pts_for += row['score']
+            current_pts_against += row['opp_score']
+            if row['won']:
+                current_points += 4
+            elif row['score'] == row['opp_score']:
+                current_points += 2
+                
+        current_percentage = (current_pts_for / current_pts_against * 100) if current_pts_against > 0 else 100
 
         # Calculate trends based on last 5 vs previous 5
         last_5 = team_matches.tail(5)
@@ -136,8 +159,18 @@ def calculate_team_trends():
         recent_sos = last_5['opp_strength'].mean() if not last_5.empty else 0.5
         recent_sos_multiplier = recent_sos / 0.5 if recent_sos > 0 else 1.0
         
+        # Consecutive losses
+        consecutive_losses = 0
+        for won in reversed(team_matches['won'].tolist()):
+            if not won:
+                consecutive_losses += 1
+            else:
+                break
+                
         # New Metrics
         finishing_power = last_5['q4_margin'].mean() if not last_5.empty else 0
+        q1_power = last_5['q1_margin'].mean() if not last_5.empty else 0
+        q3_power = last_5['q3_margin'].mean() if not last_5.empty else 0
         
         # Rolling Efficiency (Last 3 games)
         last_3 = team_matches.tail(3)
@@ -147,15 +180,22 @@ def calculate_team_trends():
         
         narrative_tags = []
         
-        if finishing_power > 10:
-            narrative_tags.append("Elite 4th Quarter")
-        elif finishing_power < -10:
-            narrative_tags.append("Late Game Fade")
+        # Group Chat Fuel Tags (from PRD)
+        if recent_win_rate > 0.6 and recent_sos < 0.4:
+            narrative_tags.append("Flat-Track Bullies")
             
-        if rolling_efficiency > 130:
-            narrative_tags.append("Highly Efficient")
-        elif rolling_efficiency < 70:
-            narrative_tags.append("Struggling to Convert")
+        if finishing_power > 10 and abs(recent_avg_margin) < 12:
+            narrative_tags.append("The Cardiac Kids")
+            
+        if q3_power > 15 and q3_power > (q1_power + 10) and q3_power > (finishing_power + 10):
+            narrative_tags.append("Premiership Quarter Specialists")
+            
+        if recent_win_rate < 0.3 and -15 < recent_avg_margin < 0:
+            narrative_tags.append("Honourable Losses")
+            
+        if len(team_matches) >= 15 and recent_win_rate <= 0.2 and consecutive_losses >= 3:
+            # We don't have season_win_rate easily available without extra calculation, so just proxy it
+            narrative_tags.append("September Teasers")
         
         if not prev_5.empty:
             prev_win_rate = prev_5['won'].mean()
@@ -194,10 +234,25 @@ def calculate_team_trends():
         elif recent_sos < 0.45 and trend == "Rising":
             narrative_tags.append("Soft Draw Rise")
 
-        results.append({
+        # Step A: Calculate Form Modifier
+        norm_efficiency = rolling_efficiency / 100.0
+        norm_win_rate = recent_win_rate / 0.5
+        norm_sos = recent_sos_multiplier
+        form_modifier = (norm_efficiency * 0.5) + (norm_win_rate * 0.3) + (norm_sos * 0.2)
+
+        # Step B: Calculate Expected Points & Percentage
+        x_pts = current_points * form_modifier
+        x_pct = current_percentage * form_modifier
+
+        team_data_map[team_name] = {
             "team": team_name,
             "trend": trend,
             "narrative_tags": narrative_tags,
+            "current_points": current_points,
+            "current_percentage": current_percentage,
+            "form_modifier": form_modifier,
+            "x_pts": x_pts,
+            "x_pct": x_pct,
             "supporting_metrics": {
                 "recent_win_rate": float(recent_win_rate),
                 "recent_avg_margin": float(recent_avg_margin),
@@ -208,9 +263,68 @@ def calculate_team_trends():
                 "strength_of_schedule": float(recent_sos),
                 "finishing_power": float(finishing_power),
                 "rolling_efficiency": float(rolling_efficiency),
+                "consecutive_losses": int(consecutive_losses),
                 "games_analyzed": len(team_matches)
             }
-        })
+        }
+
+    # Pass 2: Sort to find CLP and ELP, and apply final narrative tags
+    # Calculate Current Ladder Position (CLP)
+    sorted_by_clp = sorted(
+        team_data_map.values(), 
+        key=lambda x: (x.get("current_points", 0), x.get("current_percentage", 0)), 
+        reverse=True
+    )
+    
+    for i, t in enumerate(sorted_by_clp):
+        t["current_ladder_position"] = i + 1
+
+    # Calculate Expected Ladder Position (ELP)
+    sorted_by_elp = sorted(
+        team_data_map.values(), 
+        key=lambda x: (x.get("x_pts", 0), x.get("x_pct", 0)), 
+        reverse=True
+    )
+
+    for i, t in enumerate(sorted_by_elp):
+        t["expected_ladder_position"] = i + 1
+
+    results = []
+    for team_data in team_data_map.values():
+        if team_data["trend"] == "Stable" and "reason" in team_data["supporting_metrics"]:
+            results.append(team_data)
+            continue
+            
+        clp = team_data["current_ladder_position"]
+        elp = team_data["expected_ladder_position"]
+        trend = team_data["trend"]
+        
+        # Tag Name Triggers / Logic
+        if trend == "Falling" and team_data["supporting_metrics"]["consecutive_losses"] >= 3:
+            team_data["narrative_tags"].append("Sinking Ship")
+            
+        if clp > elp and (clp - elp) >= 3 and team_data["supporting_metrics"]["finishing_power"] < -10:
+            team_data["narrative_tags"].append("The Ultimate Tease")
+            
+        if clp <= 4 and elp >= clp + 4:
+            team_data["narrative_tags"].append("Paper Tigers")
+            
+        if clp >= 8 and elp <= clp - 4:
+            team_data["narrative_tags"].append("Sleeping Giants")
+            
+        if abs(clp - elp) <= 1:
+            team_data["narrative_tags"].append("Market Corrected")
+            
+        if elp <= 4 and trend == "Falling":
+            team_data["narrative_tags"].append("Glass Ceiling")
+            
+        if clp >= 11 and elp <= 10 and trend == "Rising":
+            team_data["narrative_tags"].append("The Great Escape")
+            
+        if 7 <= clp <= 10:
+            team_data["narrative_tags"].append("Wildcard Contender")
+
+        results.append(team_data)
 
     # Save output
     output_path = metrics_dir / 'team_trends.json'

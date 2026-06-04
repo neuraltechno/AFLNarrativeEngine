@@ -122,3 +122,27 @@ A user should be able to visit the website every Monday and immediately understa
 * Which teams are genuine contenders
 
 Without reading multiple AFL articles.
+
+---
+
+## Narrative Tag Engine Rules
+
+To make the insights highly relatable and cheeky, the engine uses dynamic narrative tags assigned based on strict data triggers (a rules engine pattern). This provides "Group Chat Fuel"—the kind of AFL vernacular fans use.
+
+### Core Tags & Triggers
+
+*   **"Flat-Track Bullies"**: High 3-Week Efficiency or win rate, but very low Strength of Schedule (SoS). (Crushing minnows, struggling against good teams).
+*   **"The Cardiac Kids"**: Massive positive Q4 Finishing Power but low overall margins. (Always winning in close thrillers).
+*   **"Sinking Ship"**: Falling trend combined with high late-game fatigue or 3+ consecutive losses.
+*   **"The Ultimate Tease"**: High Expected Ladder Position, but continually dropping close games due to poor Q4 structure.
+*   **"Downhill Skiers"**: Huge positive differential in Uncontested Possessions and Inside 50s during wins, but massive drop-offs in Contested Possessions and Tackles in losses.
+*   **"Premiership Quarter Specialists"**: Q3 scoring differential is significantly higher (> +15 pts on average) compared to their Q1, Q2, and Q4 differentials.
+*   **"Honourable Losses"**: Win rate over the last 5 weeks is low (< 30%), but average losing margin is under 15 points, coupled with high pressure/tackle stats.
+*   **"Handbrake On"**: Very high Uncontested Marks (e.g., 100+ per game), low Inside 50s, low total match score, but high Time In Forward Half (TIFH).
+*   **"The One-Man Band"**: A single player accounts for > 35% of the team's total Clearances or Inside 50s over a 3-week rolling average.
+*   **"Traffic Cones"**: Extremely low Tackles Inside 50 + high Opposition Inside 50s + high Opposition scoring efficiency per Inside 50.
+*   **"September Teasers" (or "Peaking Too Early")**: Unbeaten or high win rate in the first 8-10 rounds, followed by a sharp negative trend line (3+ consecutive losses) in the back half of the season.
+
+### Implementation Concept
+
+The application will implement a Rules Engine (e.g., via `src/utils/narrativeTags.ts`) where tags are defined with dynamic condition functions evaluating a `TeamStatsContext` object.
