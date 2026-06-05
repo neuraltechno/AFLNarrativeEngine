@@ -13,7 +13,7 @@ export interface PlayerFormImpact {
   statType: string;
 }
 
-interface TeamTrend {
+export interface TeamTrend {
   team: string;
   trend: 'Rising' | 'Stable' | 'Falling';
   narrative_tags?: string[];
@@ -140,8 +140,17 @@ function FormMatrix({ trends }: { trends: TeamTrend[] }) {
   );
 }
 
+import { TeamList } from './TeamList';
+
 export default async function TeamsPage() {
   const trends = await getTeamTrends();
+
+  // Sort by expected_ladder_position as default
+  const sortedTrends = [...trends].sort((a, b) => {
+    const posA = a.expected_ladder_position ?? 99;
+    const posB = b.expected_ladder_position ?? 99;
+    return posA - posB;
+  });
 
   return (
     <div className="p-8 font-sans max-w-4xl mx-auto">
@@ -152,146 +161,7 @@ export default async function TeamsPage() {
 
       <FormMatrix trends={trends} />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {trends.map((team) => (
-          <div 
-            key={team.team} 
-            className="border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-zinc-900"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{team.team}</h2>
-              <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                team.trend === 'Rising' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                team.trend === 'Falling' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
-                'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300'
-              }`}>
-                {team.trend}
-              </span>
-            </div>
-
-            {(team.current_ladder_position || team.expected_ladder_position) && (
-              <div className="flex justify-between items-center mb-3 text-sm">
-                <span className="text-zinc-500">Ladder Position: <strong className="text-zinc-900 dark:text-zinc-100">{team.current_ladder_position}</strong></span>
-                
-                {team.expected_ladder_position && (
-                  <span className="text-zinc-500 flex items-center gap-1">
-                    Expected: <strong className="text-zinc-900 dark:text-zinc-100">{team.expected_ladder_position}</strong>
-                    {team.current_ladder_position! > team.expected_ladder_position ? (
-                      <span className="text-green-500 text-xs" title="Underperforming, expected to rise">▲</span>
-                    ) : team.current_ladder_position! < team.expected_ladder_position ? (
-                      <span className="text-red-500 text-xs" title="Overperforming, expected to fall">▼</span>
-                    ) : (
-                      <span className="text-zinc-400 text-xs">—</span>
-                    )}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {team.narrative_tags && team.narrative_tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
-                {team.narrative_tags.map(tag => (
-                  <span key={tag} className="px-2 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded text-[10px] font-medium tracking-wide">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-            
-            <div className="space-y-1 text-sm text-zinc-600 dark:text-zinc-400">
-              <div className="flex justify-between">
-                <span>Recent Win Rate:</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100">{(team.supporting_metrics.recent_win_rate * 100).toFixed(0)}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Avg Margin:</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100">{team.supporting_metrics.recent_avg_margin.toFixed(1)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Avg Score:</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100">{team.supporting_metrics.recent_avg_score.toFixed(1)}</span>
-              </div>
-              {team.supporting_metrics.strength_of_schedule !== undefined && (
-                <div className="flex justify-between">
-                  <span>Opponent SoS:</span>
-                  <span className={`font-semibold ${team.supporting_metrics.strength_of_schedule > 0.55 ? 'text-red-600 dark:text-red-400' : team.supporting_metrics.strength_of_schedule < 0.45 ? 'text-green-600 dark:text-green-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    {(team.supporting_metrics.strength_of_schedule * 100).toFixed(0)}%
-                  </span>
-                </div>
-              )}
-              {team.supporting_metrics.weighted_margin_trend !== undefined && (
-                <div className="flex justify-between">
-                  <span>SoS-Weighted Margin Trend:</span>
-                  <span className={`font-semibold ${team.supporting_metrics.weighted_margin_trend > 0 ? 'text-green-600 dark:text-green-400' : team.supporting_metrics.weighted_margin_trend < 0 ? 'text-red-600 dark:text-red-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    {team.supporting_metrics.weighted_margin_trend > 0 ? '+' : ''}{team.supporting_metrics.weighted_margin_trend.toFixed(1)}
-                  </span>
-                </div>
-              )}
-              {team.supporting_metrics.finishing_power !== undefined && (
-                <div className="flex justify-between">
-                  <span>Finishing Power (Q4):</span>
-                  <span className={`font-semibold ${team.supporting_metrics.finishing_power > 0 ? 'text-green-600 dark:text-green-400' : team.supporting_metrics.finishing_power < 0 ? 'text-red-600 dark:text-red-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    {team.supporting_metrics.finishing_power > 0 ? '+' : ''}{team.supporting_metrics.finishing_power.toFixed(1)}
-                  </span>
-                </div>
-              )}
-              {team.supporting_metrics.rolling_efficiency !== undefined && (
-                <div className="flex justify-between">
-                  <span>3-Wk Efficiency:</span>
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-                    {team.supporting_metrics.rolling_efficiency.toFixed(1)}%
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {team.supporting_metrics.next_3_sos !== undefined && (
-              <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-                <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-2">
-                  The Next 3 Weeks
-                </h4>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-zinc-600 dark:text-zinc-400">Upcoming SoS:</span>
-                  <span className={`font-semibold ${team.supporting_metrics.next_3_sos > 0.55 ? 'text-red-600 dark:text-red-400' : team.supporting_metrics.next_3_sos < 0.45 ? 'text-green-600 dark:text-green-400' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    {(team.supporting_metrics.next_3_sos * 100).toFixed(0)}%
-                  </span>
-                </div>
-                {team.narrative_tags?.includes("Reality Check Window") && (
-                  <div className="mt-2 text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1 bg-red-50 dark:bg-red-900/10 p-1.5 rounded">
-                    <span>⚠️</span> Reality Check Window
-                  </div>
-                )}
-                {team.narrative_tags?.includes("Soft Landing") && (
-                  <div className="mt-2 text-xs font-bold text-green-600 dark:text-green-400 flex items-center gap-1 bg-green-50 dark:bg-green-900/10 p-1.5 rounded">
-                    <span>🪂</span> Soft Landing
-                  </div>
-                )}
-                
-                {team.key_players && team.key_players.length > 0 && (
-                  <div className="mt-3 space-y-2">
-                    {team.key_players.map((kp, idx) => (
-                      <div key={idx} className={`p-2 rounded text-xs border ${
-                        kp.role === 'Engine Room' ? 'bg-green-50/50 border-green-200 dark:bg-green-900/20 dark:border-green-800' :
-                        kp.role === 'Missing Link' ? 'bg-red-50/50 border-red-200 dark:bg-red-900/20 dark:border-red-800' :
-                        'bg-amber-50/50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800'
-                      }`}>
-                        <div className="flex items-center gap-1.5 font-bold mb-1">
-                          {kp.role === 'Engine Room' && <span className="text-green-600 dark:text-green-400">🚂 The Engine Room</span>}
-                          {kp.role === 'Missing Link' && <span className="text-red-600 dark:text-red-400">👻 The Missing Link</span>}
-                          {kp.role === 'One-Man Band' && <span className="text-amber-600 dark:text-amber-400">🎸 The One-Man Band</span>}
-                        </div>
-                        <p className="text-zinc-600 dark:text-zinc-300">
-                          <strong>{kp.playerName}</strong> {kp.narrativeBlurb}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <TeamList trends={sortedTrends} />
 
       <section className="mt-8 mb-8 p-5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-700 dark:text-zinc-300">
         <h2 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3 flex items-center gap-2">
