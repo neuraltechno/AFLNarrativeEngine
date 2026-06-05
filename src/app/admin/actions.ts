@@ -13,7 +13,7 @@ export async function runScript(scriptName: string) {
     if (scriptName === 'fetch') {
       command = 'python scripts/fetch_data.py';
     } else if (scriptName === 'trends') {
-      command = 'python scripts/calculate_team_trends.py';
+      command = 'python scripts/calculate_team_trends.py && python scripts/calculate_player_trends.py';
     } else {
       throw new Error('Unknown script');
     }

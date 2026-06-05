@@ -14,7 +14,17 @@ async function getStats() {
     fallingCount = trends.filter((t: any) => t.trend === 'Falling').length;
   }
 
-  return { risingCount, fallingCount, totalTeams };
+  const playersPath = path.join(process.cwd(), 'data', 'metrics', 'player_trends.json');
+  let risingPlayersCount = 0;
+  let totalPlayersCount = 0;
+
+  if (fs.existsSync(playersPath)) {
+    const players = JSON.parse(fs.readFileSync(playersPath, 'utf8'));
+    totalPlayersCount = players.length;
+    risingPlayersCount = players.filter((p: any) => p.trend === 'Rising').length;
+  }
+
+  return { risingCount, fallingCount, totalTeams, risingPlayersCount, totalPlayersCount };
 }
 
 export default async function Home() {
@@ -38,8 +48,19 @@ export default async function Home() {
             View All Trends
           </a>
         </div>
-        
+
         <div className="bg-zinc-50 border rounded-xl p-6">
+          <h2 className="text-xl font-bold mb-2">Player Performance</h2>
+          <p className="text-zinc-600 mb-4">
+            Currently tracking {stats.totalPlayersCount} players. 
+            {stats.risingPlayersCount} are rising in impact.
+          </p>
+          <a href="/players" className="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors">
+            Explore Players
+          </a>
+        </div>
+        
+        <div className="bg-zinc-50 border rounded-xl p-6 md:col-span-2">
           <h2 className="text-xl font-bold mb-2">Round Narratives</h2>
           <p className="text-zinc-600 mb-4">
             Analysis of the latest matches and key stories.

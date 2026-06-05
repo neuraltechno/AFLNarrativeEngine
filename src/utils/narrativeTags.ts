@@ -9,6 +9,26 @@ export type PlayerFormImpact = {
   statType: 'Clearances' | 'Contested Possessions' | 'Inside 50s' | 'Score Involvements' | 'General';
 };
 
+export type PlayerStatsContext = {
+  disposals: number;
+  kicks: number;
+  handballs: number;
+  marks: number;
+  goals: number;
+  behinds: number;
+  tackles: number;
+  clearances: number;
+  contested_possessions: number;
+  uncontested_possessions: number;
+  clangers: number;
+  goal_assists: number;
+  spoils: number;
+  hitouts: number;
+  metres_gained: number;
+  role: string;
+  gamesPlayed: number;
+};
+
 export type TeamStatsContext = {
   // General Win/Loss
   winRate: number; // 0.0 to 1.0
@@ -158,3 +178,82 @@ export const TEAM_NARRATIVE_TAGS: NarrativeTag[] = [
 export function getTagsForTeam(stats: TeamStatsContext): NarrativeTag[] {
   return TEAM_NARRATIVE_TAGS.filter((tag) => tag.condition(stats));
 }
+
+export type PlayerNarrativeTag = {
+  id: string;
+  label: string;
+  description: string;
+  type: 'positive' | 'negative' | 'neutral';
+  condition: (stats: PlayerStatsContext) => boolean;
+};
+
+export const PLAYER_NARRATIVE_TAGS: PlayerNarrativeTag[] = [
+  {
+    id: 'leather-poisoner',
+    label: 'The Leather Poisoner',
+    description: 'High-volume accumulator who gets heaps of the ball but doesn\'t damage the opposition.',
+    type: 'negative',
+    condition: (stats) => stats.disposals >= 26.0 && stats.metres_gained < 300.0 && stats.goal_assists < 0.5,
+  },
+  {
+    id: 'pure-grit',
+    label: 'Pure Grit',
+    description: 'A blue-collar player doing the hard, dirty work in the trenches.',
+    type: 'positive',
+    condition: (stats) => stats.disposals > 0 && (stats.contested_possessions / stats.disposals) >= 0.55 && stats.clearances >= 4.5 && stats.tackles >= 5.0,
+  },
+  {
+    id: 'kick-to-self-merchant',
+    label: 'The Kick-To-Self Merchant',
+    description: 'Pumps up stats with uncontested, low-impact play.',
+    type: 'negative',
+    condition: (stats) => stats.disposals > 0 && (stats.uncontested_possessions / stats.disposals) >= 0.75 && stats.contested_possessions < 4.0,
+  },
+  {
+    id: 'almost-man',
+    label: 'The Almost Man',
+    description: 'Highly dangerous forward generating scoring shots but missing targets.',
+    type: 'negative',
+    condition: (stats) => (stats.goals + stats.behinds) >= 2.5 && (stats.goals / (stats.goals + stats.behinds)) < 0.40,
+  },
+  {
+    id: 'decoy',
+    label: 'The Decoy',
+    description: 'A key forward pulling defenders away and setting up goals for teammates.',
+    type: 'neutral',
+    condition: (stats) => stats.role === 'Key Forward' && stats.goals <= 0.8 && stats.goal_assists >= 0.8,
+  },
+  {
+    id: 'heatwave',
+    label: 'The Heatwave',
+    description: 'Pressure forward trapping the ball inside 50 with intense defensive efforts.',
+    type: 'positive',
+    condition: (stats) => stats.role === 'Small/General Forward' && stats.tackles >= 4.0,
+  },
+  {
+    id: 'double-agent',
+    label: 'The Double Agent',
+    description: 'Highly active but turns the ball over or concedes critical penalties constantly.',
+    type: 'negative',
+    condition: (stats) => stats.clangers >= 4.5 || stats.clangers > stats.disposals * 0.25,
+  },
+  {
+    id: 'traffic-warden',
+    label: 'The Traffic Warden',
+    description: 'Key defender completely commanding the air and spoiling everything.',
+    type: 'positive',
+    condition: (stats) => stats.role === 'Key Defender' && stats.marks >= 5.0 && stats.spoils >= 6.0,
+  },
+  {
+    id: 'unsung-hero',
+    label: 'The Unsung Hero',
+    description: 'Low disposal count but massive physical impact on the contest.',
+    type: 'positive',
+    condition: (stats) => stats.disposals < 16.0 && stats.contested_possessions >= 8.0 && stats.tackles >= 4.0,
+  }
+];
+
+export function getTagsForPlayer(stats: PlayerStatsContext): PlayerNarrativeTag[] {
+  return PLAYER_NARRATIVE_TAGS.filter((tag) => tag.condition(stats));
+}
+

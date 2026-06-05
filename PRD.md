@@ -151,6 +151,31 @@ To make the insights highly relatable and cheeky, the engine uses dynamic narrat
 *   **"The Engine Room"**: A team is on a "Rising" trend and a specific player's pure stats (e.g., Clearances, Contested Possessions) have spiked > 20% over a 3-week window.
 *   **"The Missing Link"**: A team is on a "Falling" trend and a key player's pure stats have dropped significantly (> 20%) over the exact same window.
 
+### Player Narrative Tags & Data Triggers
+
+*   **"The Leather Poisoner"**: High-volume accumulator who gets heaps of the ball but doesn't damage the opposition ($> 30$ Disposals, but $< 250\text{m}$ Metres Gained, and $< 3$ Score Involvements).
+*   **"The Barometer"**: Team margin correlation is extremely high with this player's performance. When they play well, the team wins; when they drop off, the team crumbles. (Correlation with margin $> 0.8$ over rolling 5 matches).
+*   **"Pure Grit"**: A player doing the dirty work in the trenches ($> 65\%$ of disposals are Contested, $> 5$ Clearances, and $> 6$ Tackles).
+*   **"The Kick-To-Self Merchant"**: A defender/midfielder pumping up stats with low-impact uncontested play ($> 80\%$ Uncontested Disposals, $> 5$ Kick-ins played to self, and $< 4$ Contested Possessions).
+*   **"The Almost Man"**: Highly dangerous forward generating shots but killing his team with terrible accuracy ($\ge 5$ Shots on Goal but conversion rate $< 30\%$).
+*   **"The Decoy"**: A key forward who isn't scoring but is pulling defenders away and bringing others into the game (0-1 Goals, $\ge 8$ Score Involvements, and $\ge 3$ Goal Assists).
+*   **"The Heatwave"**: A pressure forward trapping the ball inside 50 through sheer work rate ($\ge 4$ Tackles Inside 50 and $\ge 5$ Ground Ball Gets Inside 50).
+*   **"The Double Agent"**: Turns the ball over or concedes costly penalties ($\ge 6$ Clangers or Free Kicks Against, representing $> 25\%$ of total disposals).
+*   **"The Traffic Warden"**: Key defender completely commanding the air and shutting down attacks ($\ge 5$ Intercept Marks and $\ge 8$ Spoils).
+*   **"The Breakout Watch"**: Player under 23 or under 50 games whose PIR has risen $> 30\%$ over a rolling 3-week window.
+*   **"The Cliff-Edge"**: Veteran player over 29 whose output (Tackles, Contested Possessions, Metres Gained) has dropped $> 25\%$ over 4 weeks.
+*   **"The Unsung Hero"**: Low disposals but elite impact metrics ($< 18$ Disposals, $> 10$ Contested Possessions, $> 5$ Tackles, and $> 6$ Score Involvements).
+
+### Player Performance Ratings (Player Impact Rating - PIR)
+
+A proprietary 0-100 score based on raw stats weighted by role:
+*   **Inside Mid**: Contested Possessions, Clearances, Tackles, Goal Assists (Penalties: Clangers, Free Kicks Against).
+*   **Outside Mid**: Metres Gained, Inside 50s, Uncontested Marks, Score Involvements (Penalties: Clangers, Turnovers).
+*   **Key Forward**: Marks Inside 50, Goals, Behinds, Contested Marks (Penalties: Clangers).
+*   **Small Forward**: Goals, Tackles Inside 50, Score Involvements, Goal Assists.
+*   **Key Defender**: Intercept Marks, Spoils, Contested Marks, Intercept Possessions (Penalties: Clangers).
+*   **Rebounding Defender**: Rebound 50s, Metres Gained, Kick Effectiveness % (Penalties: Turnovers).
+
 ### Implementation Concept
 
 The application will implement a Rules Engine (e.g., via `src/utils/narrativeTags.ts`) where tags are defined with dynamic condition functions evaluating a `TeamStatsContext` object.
