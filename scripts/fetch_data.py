@@ -54,8 +54,8 @@ def main():
     except Exception as e:
         print(f"Error fetching fixtures: {e}")
     
-    # Use 2023, 2024, 2025, 2026
-    years = [2023, 2024, 2025, 2026]
+    # Use 2026
+    years = [2026]
     
     for year in years:
         print(f"Fetching data for {year}...")

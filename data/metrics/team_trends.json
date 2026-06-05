@@ -38,13 +38,13 @@
     ],
     "key_players": [
       {
-        "playerId": "9",
-        "playerName": "Neale, Lachie",
-        "baselineScore": 8.9,
-        "windowScore": 5.6,
-        "delta": -0.25,
+        "playerId": "8",
+        "playerName": "Ashcroft, Will",
+        "baselineScore": 5.4,
+        "windowScore": 3.4,
+        "delta": -0.37,
         "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 5.6 per game), leaving a massive hole in the middle.",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 37.0% over the last 5 weeks (down to 3.4 per game), leaving a massive hole in the middle.",
         "statType": "Clearances"
       }
     ],
@@ -81,13 +81,13 @@
     ],
     "key_players": [
       {
-        "playerId": "9",
-        "playerName": "Cripps, Patrick",
-        "baselineScore": 12.1,
-        "windowScore": 18.9,
-        "delta": 0.25,
+        "playerId": "10",
+        "playerName": "McKay, Harry",
+        "baselineScore": 7.0,
+        "windowScore": 8.8,
+        "delta": 0.257,
         "role": "Engine Room",
-        "narrativeBlurb": "has dominated the inside with a massive 25% spike in contested possessions (avg 18.9), fueling the team's surge.",
+        "narrativeBlurb": "has dominated the inside with a 25.7% spike in contested possessions over the last 5 weeks (avg 8.8), fueling the team's surge.",
         "statType": "Contested Possessions"
       }
     ],
@@ -124,13 +124,13 @@
     ],
     "key_players": [
       {
-        "playerId": "35",
-        "playerName": "Daicos, Nick",
-        "baselineScore": 6.0,
-        "windowScore": 3.8,
-        "delta": -0.25,
+        "playerId": "22",
+        "playerName": "Sidebottom, Steele",
+        "baselineScore": 2.5,
+        "windowScore": 0.8,
+        "delta": -0.68,
         "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 3.8 per game), leaving a massive hole in the middle.",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 68.0% over the last 5 weeks (down to 0.8 per game), leaving a massive hole in the middle.",
         "statType": "Clearances"
       }
     ],
@@ -168,13 +168,13 @@
     ],
     "key_players": [
       {
-        "playerId": "3",
-        "playerName": "Parish, Darcy",
-        "baselineScore": 6.3,
-        "windowScore": 4.0,
-        "delta": -0.25,
+        "playerId": "46",
+        "playerName": "Blakiston, Lachlan",
+        "baselineScore": 2.0,
+        "windowScore": 1.2,
+        "delta": -0.4,
         "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 25% during this slump (down to 4.0 per game), leaving a massive hole in the middle.",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 40.0% over the last 5 weeks (down to 1.2 per game), leaving a massive hole in the middle.",
         "statType": "Clearances"
       }
     ],
@@ -234,9 +234,21 @@
     "trend": "Rising",
     "narrative_tags": [
       "Reality Check Window",
+      "The Engine Room",
       "Market Corrected"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "34",
+        "playerName": "Mullin, Oisin",
+        "baselineScore": 4.6,
+        "windowScore": 7.4,
+        "delta": 0.609,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a 60.9% spike in contested possessions over the last 5 weeks (avg 7.4), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
+    ],
     "current_points": 32,
     "current_percentage": 121.85628742514969,
     "form_modifier": 1.320693963394836,
@@ -294,9 +306,21 @@
     "narrative_tags": [
       "Premiership Quarter Specialists",
       "Soft Draw Rise",
+      "The Engine Room",
       "Wildcard Contender"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "32",
+        "playerName": "Briggs, Kieren",
+        "baselineScore": 6.0,
+        "windowScore": 8.2,
+        "delta": 0.367,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a 36.7% spike in contested possessions over the last 5 weeks (avg 8.2), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
+    ],
     "current_points": 24,
     "current_percentage": 103.20512820512822,
     "form_modifier": 1.2604410525334517,
@@ -323,10 +347,22 @@
     "team": "Hawthorn",
     "trend": "Falling",
     "narrative_tags": [
+      "The Missing Link",
       "Market Corrected",
       "Glass Ceiling"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "17",
+        "playerName": "Meek, Lloyd",
+        "baselineScore": 3.2,
+        "windowScore": 2.2,
+        "delta": -0.312,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 31.2% over the last 5 weeks (down to 2.2 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 34,
     "current_percentage": 114.82926829268291,
     "form_modifier": 1.0009883921490792,
@@ -352,8 +388,21 @@
   {
     "team": "Melbourne",
     "trend": "Falling",
-    "narrative_tags": [],
-    "key_players": [],
+    "narrative_tags": [
+      "The Missing Link"
+    ],
+    "key_players": [
+      {
+        "playerId": "11",
+        "playerName": "Gawn, Max",
+        "baselineScore": 6.6,
+        "windowScore": 5.2,
+        "delta": -0.212,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 21.2% over the last 5 weeks (down to 5.2 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 28,
     "current_percentage": 101.79640718562875,
     "form_modifier": 0.9179282394958855,
@@ -380,9 +429,21 @@
     "team": "North Melbourne",
     "trend": "Falling",
     "narrative_tags": [
-      "Soft Landing"
+      "Soft Landing",
+      "The Missing Link"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "21",
+        "playerName": "Coleman-Jones, Callum",
+        "baselineScore": 3.8,
+        "windowScore": 0,
+        "delta": -1.0,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 100.0% over the last 5 weeks (down to 0 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 20,
     "current_percentage": 97.55409219190969,
     "form_modifier": 0.7488623931744545,
@@ -411,10 +472,22 @@
     "narrative_tags": [
       "Honourable Losses",
       "September Teasers",
+      "The Missing Link",
       "Sinking Ship",
       "Market Corrected"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "24",
+        "playerName": "Sweet, Jordon",
+        "baselineScore": 5.0,
+        "windowScore": 4.2,
+        "delta": -0.16,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 16.0% over the last 5 weeks (down to 4.2 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 12,
     "current_percentage": 100.89086859688197,
     "form_modifier": 0.7221163554061855,
@@ -442,9 +515,21 @@
     "trend": "Rising",
     "narrative_tags": [
       "Soft Draw Rise",
+      "The Engine Room",
       "Market Corrected"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "21",
+        "playerName": "Balta, Noah",
+        "baselineScore": 3.8,
+        "windowScore": 9.2,
+        "delta": 1.453,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a 145.3% spike in contested possessions over the last 5 weeks (avg 9.2), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
+    ],
     "current_points": 8,
     "current_percentage": 60.35276073619632,
     "form_modifier": 0.7133732992934261,
@@ -471,9 +556,21 @@
     "team": "St Kilda",
     "trend": "Falling",
     "narrative_tags": [
+      "The Missing Link",
       "Market Corrected"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "9",
+        "playerName": "Flanders, Sam",
+        "baselineScore": 3.0,
+        "windowScore": 1.2,
+        "delta": -0.6,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 60.0% over the last 5 weeks (down to 1.2 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 20,
     "current_percentage": 102.28353948620361,
     "form_modifier": 0.8531279924837142,
@@ -501,10 +598,22 @@
     "trend": "Falling",
     "narrative_tags": [
       "Premiership Quarter Specialists",
+      "The Missing Link",
       "Market Corrected",
       "Glass Ceiling"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "1",
+        "playerName": "Warner, Chad",
+        "baselineScore": 5.0,
+        "windowScore": 3.0,
+        "delta": -0.4,
+        "role": "Missing Link",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 40.0% over the last 5 weeks (down to 3.0 per game), leaving a massive hole in the middle.",
+        "statType": "Clearances"
+      }
+    ],
     "current_points": 40,
     "current_percentage": 152.42825607064017,
     "form_modifier": 1.350126771927496,
@@ -531,9 +640,21 @@
     "team": "West Coast",
     "trend": "Rising",
     "narrative_tags": [
+      "The Engine Room",
       "Market Corrected"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "9",
+        "playerName": "Reid, Harley",
+        "baselineScore": 10.0,
+        "windowScore": 14.2,
+        "delta": 0.42,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a 42.0% spike in contested possessions over the last 5 weeks (avg 14.2), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
+    ],
     "current_points": 16,
     "current_percentage": 69.98407643312102,
     "form_modifier": 1.0107667476693623,
@@ -561,10 +682,22 @@
     "trend": "Rising",
     "narrative_tags": [
       "Battle-Tested Rise",
+      "The Engine Room",
       "Market Corrected",
       "Wildcard Contender"
     ],
-    "key_players": [],
+    "key_players": [
+      {
+        "playerId": "27",
+        "playerName": "Freijah, Joel",
+        "baselineScore": 6.8,
+        "windowScore": 9.8,
+        "delta": 0.441,
+        "role": "Engine Room",
+        "narrativeBlurb": "has dominated the inside with a 44.1% spike in contested possessions over the last 5 weeks (avg 9.8), fueling the team's surge.",
+        "statType": "Contested Possessions"
+      }
+    ],
     "current_points": 28,
     "current_percentage": 93.72759856630825,
     "form_modifier": 1.070640467517644,

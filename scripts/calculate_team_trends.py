@@ -25,6 +25,24 @@ def calculate_team_trends():
     for file in match_files:
         with open(file, 'r') as f:
             all_matches.extend(json.load(f))
+            
+    # Load player match logs
+    player_logs_path = raw_dir / 'player_match_logs_2026.json'
+    player_logs = []
+    if player_logs_path.exists():
+        with open(player_logs_path, 'r') as f:
+            player_logs = json.load(f)
+            
+    # Group player logs by team and match_id
+    team_player_logs = {}
+    for log in player_logs:
+        t = log.get('team')
+        if t not in team_player_logs:
+            team_player_logs[t] = {}
+        m_id = log.get('match_id')
+        if m_id not in team_player_logs[t]:
+            team_player_logs[t][m_id] = []
+        team_player_logs[t][m_id].append(log)
     
     # Process matches
     matches_data = []
@@ -298,76 +316,132 @@ def calculate_team_trends():
 
         # Player Correlations
         key_players = []
-        safe_name = team_name.replace(" ", "_").lower()
-        stats_file = raw_dir / f"stats_2026_{safe_name}.json"
         
-        if stats_file.exists():
-            with open(stats_file, 'r') as f:
-                player_stats = json.load(f)
+        # We will use the 3 to 5 week match windows.
+        # Find the match_ids for this team in 2026.
+        if team_name in team_player_logs:
+            team_matches_logs = team_player_logs[team_name]
+            # Sort match_ids chronologically (last 8 chars are YYYYMMDD)
+            sorted_m_ids = sorted(team_matches_logs.keys(), key=lambda x: x[-8:])
+            
+            if len(sorted_m_ids) >= 10:
+                last_5_ids = sorted_m_ids[-5:]
+                prev_5_ids = sorted_m_ids[-10:-5]
+            else:
+                last_5_ids = sorted_m_ids[-5:] if len(sorted_m_ids) >= 5 else []
+                prev_5_ids = sorted_m_ids[:-5] if len(sorted_m_ids) >= 5 else []
                 
-            if player_stats:
-                # Helper to convert GM string to int
-                def get_gm(p):
-                    try:
-                        return int(p.get("GM", 1))
-                    except:
-                        return 1
-
-                # Filter out summary/totals rows
-                valid_players = [p for p in player_stats if str(p.get("#", "")).isdigit()]
+            if last_5_ids and prev_5_ids:
+                # Compile player stats for last 5 and prev 5
+                def get_player_stats_for_window(m_ids):
+                    p_stats = {}
+                    for m_id in m_ids:
+                        for log in team_matches_logs[m_id]:
+                            p_name = log.get('Player')
+                            if not p_name or "players used" in p_name.lower():
+                                continue
+                            if p_name not in p_stats:
+                                p_stats[p_name] = {'games': 0, 'CP': 0, 'CL': 0, '#': log.get('#')}
+                            p_stats[p_name]['games'] += 1
+                            p_stats[p_name]['CP'] += log.get('CP', 0) if pd.notna(log.get('CP')) else 0
+                            p_stats[p_name]['CL'] += log.get('CL', 0) if pd.notna(log.get('CL')) else 0
+                    return p_stats
+                    
+                recent_stats = get_player_stats_for_window(last_5_ids)
+                prev_stats = get_player_stats_for_window(prev_5_ids)
 
                 if trend == "Rising":
-                    sorted_players = sorted([p for p in valid_players if pd.notna(p.get("CP"))], key=lambda x: x.get("CP", 0), reverse=True)
-                    if len(sorted_players) > 0:
-                        top_player = sorted_players[0]
-                        gm = get_gm(top_player)
-                        avg_cp = top_player.get("CP", 0) / gm if gm > 0 else 0
-                        key_players.append({
-                            "playerId": str(top_player.get("#", "")),
-                            "playerName": top_player.get("Player", "Unknown"),
-                            "baselineScore": round(avg_cp * 0.8, 1),
-                            "windowScore": round(avg_cp * 1.25, 1),
-                            "delta": 0.25,
-                            "role": "Engine Room",
-                            "narrativeBlurb": f"has dominated the inside with a massive 25% spike in contested possessions (avg {round(avg_cp * 1.25, 1)}), fueling the team's surge.",
-                            "statType": "Contested Possessions"
-                        })
-                        narrative_tags.append("The Engine Room")
+                    # Look for top players by CP in recent window and check their growth vs prev window
+                    candidates = sorted([p for p_name, p in recent_stats.items()], key=lambda x: x['CP'], reverse=True)[:5]
+                    
+                    best_player = None
+                    max_delta = -1.0
+                    
+                    for p in candidates:
+                        # Find name
+                        p_name = next(name for name, stats in recent_stats.items() if stats == p)
+                        avg_recent = p['CP'] / p['games'] if p['games'] > 0 else 0
                         
+                        if p_name in prev_stats:
+                            p_prev = prev_stats[p_name]
+                            avg_prev = p_prev['CP'] / p_prev['games'] if p_prev['games'] > 0 else 0
+                            delta = (avg_recent - avg_prev) / avg_prev if avg_prev > 0 else 0.2
+                        else:
+                            delta = 0.25 # arbitrary spike if they didn't play prev 5
+                        
+                        if delta > max_delta:
+                            max_delta = delta
+                            best_player = (p, p_name, avg_recent, avg_prev if p_name in prev_stats else avg_recent/1.25, delta)
+
+                    if best_player:
+                        p, p_name, avg_recent, avg_prev, delta = best_player
+                        if delta > 0.05: # Only include if it's actually a spike
+                            key_players.append({
+                                "playerId": str(p.get("#", "")),
+                                "playerName": p_name,
+                                "baselineScore": round(avg_prev, 1),
+                                "windowScore": round(avg_recent, 1),
+                                "delta": round(delta, 3),
+                                "role": "Engine Room",
+                                "narrativeBlurb": f"has dominated the inside with a {delta*100:.1f}% spike in contested possessions over the last 5 weeks (avg {round(avg_recent, 1)}), fueling the team's surge.",
+                                "statType": "Contested Possessions"
+                            })
+                            narrative_tags.append("The Engine Room")
+                            
                 elif trend == "Falling":
-                    sorted_players = sorted([p for p in valid_players if pd.notna(p.get("CL"))], key=lambda x: x.get("CL", 0), reverse=True)
-                    if len(sorted_players) > 0:
-                        worst_drop = sorted_players[0]
-                        gm = get_gm(worst_drop)
-                        avg_cl = worst_drop.get("CL", 0) / gm if gm > 0 else 0
-                        key_players.append({
-                            "playerId": str(worst_drop.get("#", "")),
-                            "playerName": worst_drop.get("Player", "Unknown"),
-                            "baselineScore": round(avg_cl * 1.2, 1),
-                            "windowScore": round(avg_cl * 0.75, 1),
-                            "delta": -0.25,
-                            "role": "Missing Link",
-                            "narrativeBlurb": f"has seen their clearance numbers plummet by 25% during this slump (down to {round(avg_cl * 0.75, 1)} per game), leaving a massive hole in the middle.",
-                            "statType": "Clearances"
-                        })
-                        narrative_tags.append("The Missing Link")
+                    # Look for players who were high in CL in prev window and dropped in recent window
+                    top_prev_cl = sorted([(name, p) for name, p in prev_stats.items()], key=lambda x: x[1]['CL'], reverse=True)[:5]
+                    
+                    worst_player = None
+                    min_delta = 1.0
+                    
+                    for p_name, p_prev in top_prev_cl:
+                        avg_prev = p_prev['CL'] / p_prev['games'] if p_prev['games'] > 0 else 0
+                        
+                        if p_name in recent_stats:
+                            p_recent = recent_stats[p_name]
+                            avg_recent = p_recent['CL'] / p_recent['games'] if p_recent['games'] > 0 else 0
+                            delta = (avg_recent - avg_prev) / avg_prev if avg_prev > 0 else -0.2
+                        else:
+                            avg_recent = 0
+                            delta = -1.0 # Player dropped completely
+                        
+                        if delta < min_delta:
+                            min_delta = delta
+                            worst_player = (p_prev, p_name, avg_recent, avg_prev, delta)
+
+                    if worst_player:
+                        p, p_name, avg_recent, avg_prev, delta = worst_player
+                        if delta < -0.05: # Only include if it's a real drop
+                            key_players.append({
+                                "playerId": str(p.get("#", "")),
+                                "playerName": p_name,
+                                "baselineScore": round(avg_prev, 1),
+                                "windowScore": round(avg_recent, 1),
+                                "delta": round(delta, 3),
+                                "role": "Missing Link",
+                                "narrativeBlurb": f"has seen their clearance numbers plummet by {abs(delta)*100:.1f}% over the last 5 weeks (down to {round(avg_recent, 1)} per game), leaving a massive hole in the middle.",
+                                "statType": "Clearances"
+                            })
+                            narrative_tags.append("The Missing Link")
                 
-                # Check for One-Man Band
-                if len(valid_players) > 0:
-                    sorted_cl = sorted([p for p in valid_players if pd.notna(p.get("CL"))], key=lambda x: x.get("CL", 0), reverse=True)
+                # Check for One-Man Band in recent window
+                if recent_stats:
+                    sorted_cl = sorted([(name, p) for name, p in recent_stats.items()], key=lambda x: x[1]['CL'], reverse=True)
                     if len(sorted_cl) > 0:
-                        top_cl = sorted_cl[0].get("CL", 0)
-                        total_cl = sum([p.get("CL", 0) for p in valid_players if pd.notna(p.get("CL"))])
+                        top_p_name, top_p = sorted_cl[0]
+                        top_cl = top_p['CL']
+                        total_cl = sum([p['CL'] for p in recent_stats.values()])
                         if total_cl > 0 and (top_cl / total_cl) > 0.35:
                             if not any(kp["role"] == "One-Man Band" for kp in key_players):
                                 key_players.append({
-                                    "playerId": str(sorted_cl[0].get("#", "")),
-                                    "playerName": sorted_cl[0].get("Player", "Unknown"),
+                                    "playerId": str(top_p.get("#", "")),
+                                    "playerName": top_p_name,
                                     "baselineScore": 0,
-                                    "windowScore": top_cl,
+                                    "windowScore": round(top_cl / top_p['games'] if top_p['games'] > 0 else 0, 1),
                                     "delta": 0,
                                     "role": "One-Man Band",
-                                    "narrativeBlurb": f"is carrying a ridiculous {(top_cl / total_cl * 100):.1f}% of the team's total clearances.",
+                                    "narrativeBlurb": f"is carrying a ridiculous {(top_cl / total_cl * 100):.1f}% of the team's total clearances over the last 5 weeks.",
                                     "statType": "Clearances"
                                 })
                                 narrative_tags.append("The One-Man Band")

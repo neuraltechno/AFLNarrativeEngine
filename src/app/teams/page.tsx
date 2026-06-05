@@ -344,8 +344,13 @@ export default async function TeamsPage() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400">Rolling percentage (Points For / Points Against) over the last 3 matches. Shows structural form independent of single-game blowouts.</p>
           </div>
           <div className="md:col-span-2">
-            <strong className="text-zinc-900 dark:text-zinc-100 block mb-1 text-xs uppercase tracking-wider">Expected Ladder Position (ELP)</strong>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">Calculated by adjusting a team&apos;s current points and percentage based on a Form Modifier (a weighted blend of 3-Week Efficiency, Recent Win Rate, and Strength of Schedule). This identifies underperforming &quot;Sleeping Giants&quot; and overperforming &quot;Paper Tigers&quot;.</p>
+            <strong className="text-zinc-900 dark:text-zinc-100 block mb-1 text-xs uppercase tracking-wider">Player Trends</strong>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-2">Highlights individual player form driving team momentum:</p>
+            <ul className="text-xs text-zinc-600 dark:text-zinc-400 grid gap-x-4 gap-y-2 md:grid-cols-3">
+              <li><strong className="text-green-600 dark:text-green-400">🚂 The Engine Room:</strong> A player whose massive spike in contested possessions is fueling a rising team.</li>
+              <li><strong className="text-red-600 dark:text-red-400">👻 The Missing Link:</strong> A key midfielder whose plummeting clearances are driving a falling team&apos;s slump.</li>
+              <li><strong className="text-amber-600 dark:text-amber-400">🎸 The One-Man Band:</strong> A player carrying an unsustainably high percentage (over 35%) of the team&apos;s total clearances.</li>
+            </ul>
           </div>
           <div className="md:col-span-2">
             <strong className="text-zinc-900 dark:text-zinc-100 block mb-1 text-xs uppercase tracking-wider">Narrative Tags</strong>
