@@ -65,6 +65,13 @@ $$Metres\_Gained\_Proxy = (Kicks \times 22) + (Handballs \times 4) + (I50 \times
 * **The Problem:** Your PIR raw denominators (e.g., dividing Inside Midfielder raw score by 110) assume a high-volume performance. If a player subbed on late in the game gets 3 clearances, 4 tackles, and 4 contested possessions, their raw score will be mathematically decent, but their low total volume shouldn't equate to a 75 PIR match.
 * **The Fix:** Scale the raw score by a **Time on Ground (TOG%)** factor, or if `pyAFL` doesn't reliably extract TOG% from `afltables.com`, apply a progressive penalization multiplier if total Disposals are below a baseline floor for that specific role (e.g., if $DI < 12$ for a Midfielder, multiply PIR by $\frac{DI}{12}$).
 
+### Veteran Status & "The Cliff-Edge" Validation
+
+* **The Problem:** The "Cliff-Edge" narrative tag is intended for veteran players whose output is declining sharply as they approach retirement. However, the existing logic only looks at a falling trend in the current season, causing it to trigger for young players (e.g., 1st or 2nd year players) who might just be experiencing a "sophomore slump" or standard form fluctuation.
+* **The Fix:** Introduce a **Career Games Proxy**. By aggregating games played ($GM$) from the 2023, 2024, and 2025 historical data files and adding current 2026 games, we establish a total games count. 
+    * **"The Cliff-Edge":** Only trigger if `Total Career Games >= 50`.
+    * **"The Breakout Watch":** Conversely, shift this tag to use the same proxy, triggering only if `Total Career Games <= 40`.
+
 ---
 
 ## 3. Team & Player Correlations (The Narrative Logic)

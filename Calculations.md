@@ -95,29 +95,29 @@ To prevent generalist scaling bias, players with $\ge 3$ games are classified in
 Each role has a unique scoring matrix, which is normalized to a 10–100 scale. Below are the formulas for raw score calculation before normalization:
 
 *   **Inside Midfielder:**
-    $$Score = (CP \times 3.0) + (CL \times 4.0) + (TK \times 2.0) + (GA \times 4.0) + (I50 \times 1.5) - (CG \times 2.0) - (FA \times 1.5)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{110} \times 100\right)\right)$$
+    $Score = (CP \times 3.0) + (CL \times 4.0) + (TK \times 2.0) + (GA \times 4.0) + (I50 \times 1.5) - (CG \times 2.0) - (FA \times 1.5)$
+    $PIR = \max\left(10, \frac{Score}{110} \times 100\right)$
 *   **Outside/Winger:**
-    $$Score = (Metres\_Gained \times 0.1) + (I50 \times 3.0) + (UP \times 1.5) + (MK \times 2.0) + (GA \times 4.0) - (CG \times 2.0)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{115} \times 100\right)\right)$$
+    $Score = (Metres\_Gained \times 0.1) + (I50 \times 3.0) + (UP \times 1.5) + (MK \times 2.0) + (GA \times 4.0) - (CG \times 2.0)$
+    $PIR = \max\left(10, \frac{Score}{115} \times 100\right)$
 *   **Key Forward:**
-    $$Score = (MI \times 8.0) + (GL \times 12.0) + (BH \times 4.0) + (CM \times 6.0) + (CP \times 1.5) - (CG \times 2.0)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{105} \times 100\right)\right)$$
+    $Score = (MI \times 8.0) + (GL \times 12.0) + (BH \times 4.0) + (CM \times 6.0) + (CP \times 1.5) - (CG \times 2.0)$
+    $PIR = \max\left(10, \frac{Score}{105} \times 100\right)$
 *   **Small/General Forward:**
-    $$Score = (GL \times 15.0) + (BH \times 5.0) + (GA \times 6.0) + (TK \times 3.0) + (I50 \times 2.0) + (CP \times 1.5) - (CG \times 1.5)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{90} \times 100\right)\right)$$
+    $Score = (GL \times 15.0) + (BH \times 5.0) + (GA \times 6.0) + (TK \times 3.0) + (I50 \times 2.0) + (CP \times 1.5) - (CG \times 1.5)$
+    $PIR = \max\left(10, \frac{Score}{90} \times 100\right)$
 *   **Key Defender:**
-    $$Score = (Spoils \times 5.0) + (MK \times 3.0) + (CM \times 6.0) + (CP \times 2.0) - (CG \times 2.0)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{85} \times 100\right)\right)$$
+    $Score = (Spoils \times 5.0) + (MK \times 3.0) + (CM \times 6.0) + (CP \times 2.0) - (CG \times 2.0)$
+    $PIR = \max\left(10, \frac{Score}{85} \times 100\right)$
 *   **Rebounding Defender:**
-    $$Score = (RB \times 6.0) + (Metres\_Gained \times 0.12) + (UP \times 1.5) + (MK \times 2.5) - (CG \times 2.5)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{170} \times 100\right)\right)$$
+    $Score = (RB \times 6.0) + (Metres\_Gained \times 0.12) + (UP \times 1.5) + (MK \times 2.5) - (CG \times 2.5)$
+    $PIR = \max\left(10, \frac{Score}{170} \times 100\right)$
 *   **Ruck:**
-    $$Score = (HO \times 1.2) + (CL \times 3.0) + (CP \times 2.5) + (TK \times 2.0) + (CM \times 5.0) - (CG \times 2.0)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{120} \times 100\right)\right)$$
+    $Score = (HO \times 1.2) + (CL \times 3.0) + (CP \times 2.5) + (TK \times 2.0) + (CM \times 5.0) - (CG \times 2.0)$
+    $PIR = \max\left(10, \frac{Score}{120} \times 100\right)$
 *   **Fallback Default:**
-    $$Score = (CP \times 2.0) + (UP \times 1.0) + (TK \times 1.5) + (GL \times 5.0) - (CG \times 1.5)$$
-    $$PIR = \min\left(100, \max\left(10, \frac{Score}{75} \times 100\right)\right)$$
+    $Score = (CP \times 2.0) + (UP \times 1.0) + (TK \times 1.5) + (GL \times 5.0) - (CG \times 1.5)$
+    $PIR = \max\left(10, \frac{Score}{75} \times 100\right)$
 
 ### 4. Player Trend Calculations
 *   **Recent Window:** Average PIR of the last 3 games ($PIR_{rec\_avg}$).
@@ -139,8 +139,8 @@ Each role has a unique scoring matrix, which is normalized to a 10–100 scale. 
 *   **"The Double Agent":** Clangers (CG) $\ge 4.5$ OR Free Kicks Against (FA) $\ge 2.0$.
 *   **"The Traffic Warden":** Assigned role is **Key Defender** AND Marks (MK) $\ge 5.0$ AND One Percenters (1%) $\ge 6.0$.
 *   **"The Unsung Hero":** Disposals (DI) $< 16.0$ AND Contested Possessions (CP) $\ge 8.0$ AND Tackles (TK) $\ge 4.0$.
-*   **"The Breakout Watch":** Trend is **Rising** AND Career/Season Games $\le 15$.
-*   **"The Cliff-Edge":** Trend is **Falling** (indicates severe drop-off in output).
+*   **"The Breakout Watch":** Trend is **Rising** AND Total Career Games (2023-2026 proxy) $\le 40$.
+*   **"The Cliff-Edge":** Trend is **Falling** AND Total Career Games (2023-2026 proxy) $\ge 50$.
 
 ---
 

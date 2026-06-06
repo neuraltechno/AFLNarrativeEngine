@@ -97,11 +97,16 @@ export default async function PlayersPage() {
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-black text-blue-600 dark:text-blue-400" title="Player Impact Rating (0-100)">
+                    <span className="text-2xl font-black text-blue-600 dark:text-blue-400" title="Player Impact Rating (Season Average)">
                       {player.pir}
                     </span>
-                    <div className="text-[10px] text-zinc-400 font-semibold">PIR RATING</div>
+                    <div className="text-[10px] text-zinc-400 font-semibold">PIR</div>
                   </div>
+                </div>
+
+                {/* PIR Breakdown tooltip/info */}
+                <div className="text-[10px] text-zinc-400 font-semibold mb-3">
+                  <span className="cursor-help" title={`Based on ${player.role} performance metrics`}>PIR Breakdown (Active)</span>
                 </div>
 
                 {/* Highlight text */}
@@ -123,23 +128,48 @@ export default async function PlayersPage() {
 
               {/* Stats overview footer inside card */}
               <div className="pt-4 border-t border-zinc-100 dark:border-zinc-900">
+                <div className="text-xs text-zinc-500 mb-2 font-semibold">Primary Drivers for {player.role} PIR</div>
                 <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                  <div>
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.disposals}</div>
-                    <div className="text-[10px] text-zinc-400 font-bold uppercase">Disp</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.contested_possessions}</div>
-                    <div className="text-[10px] text-zinc-400 font-bold uppercase">Cont</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.clearances}</div>
-                    <div className="text-[10px] text-zinc-400 font-bold uppercase">Cler</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.goals}</div>
-                    <div className="text-[10px] text-zinc-400 font-bold uppercase">Goals</div>
-                  </div>
+                  {player.role === 'Inside Midfielder' && (
+                    <>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.contested_possessions}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CP</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.clearances}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CL</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.tackles}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">TK</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.goal_assists}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">GA</div></div>
+                    </>
+                  )}
+                  {player.role === 'Key Forward' && (
+                    <>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.marks}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">MK</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.goals}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">GL</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.behinds}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">BH</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.contested_possessions}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CP</div></div>
+                    </>
+                  )}
+                  {player.role === 'Key Defender' && (
+                    <>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.spoils}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">1%</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.marks}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">MK</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.contested_possessions}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CP</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.clangers}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CG</div></div>
+                    </>
+                  )}
+                  {player.role === 'Rebounding Defender' && (
+                    <>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.disposals}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">DIS</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.marks}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">MK</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.uncontested_possessions}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">UP</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.clangers}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CG</div></div>
+                    </>
+                  )}
+                  {!['Inside Midfielder', 'Key Forward', 'Key Defender', 'Rebounding Defender'].includes(player.role) && (
+                    <>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.disposals}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">DIS</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.goals}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">GL</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.tackles}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">TK</div></div>
+                      <div><div className="font-semibold text-zinc-900 dark:text-zinc-100">{player.stats.clangers}</div><div className="text-[10px] text-zinc-400 font-bold uppercase">CG</div></div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -150,8 +180,12 @@ export default async function PlayersPage() {
       {/* Informational guide */}
       <section className="mt-12 p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-700 dark:text-zinc-300">
         <h2 className="font-bold text-zinc-900 dark:text-zinc-100 mb-4 text-base">Player Insights Guide</h2>
+        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+          Our <strong>Player Impact Rating (PIR)</strong> weights actions based on role, providing a season-long average metric of influence. We also analyze a rolling 3-game window to identify rising stars and falling veterans, with shifts marked as <em>Rising</em> or <em>Falling</em> when performance swings &ge;20% compared to the prior 3-week period.
+        </p>
+
         <p className="mb-4">
-          Rather than valuing high-volume cheap touches (like standard Fantasy stats), our <strong>Player Impact Rating (PIR)</strong> weights actions based on role:
+          Rather than valuing high-volume cheap touches (like standard Fantasy stats), PIR weights actions based on role:
         </p>
 
         <ul className="space-y-4 text-xs">

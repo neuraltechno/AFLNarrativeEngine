@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from pyAFL.players.models import Player
 
 def calculate_player_trends():
     # Use absolute paths relative to workspace root
@@ -126,8 +127,8 @@ def calculate_player_trends():
 
         # Select formula and baseline floor for volume protection
         if role == 'Inside Midfielder':
-            score = (cp * 3.0) + (cl * 4.0) + (tk * 2.0) + (ga * 4.0) + (i50 * 1.5) - (cg * 2.0) - (fa * 1.5)
-            pir = min(100, max(10, (score / 110.0) * 100))
+            score = (cp * 3.5) + (cl * 5.0) + (tk * 2.0) + (ga * 4.0) + (i50 * 1.5) - (cg * 1.5) - (fa * 1.5)
+            pir = max(10, (score / 120.0) * 100)
             # Volume protection: if Disposals < 12, scale down
             if di < 12:
                 pir = pir * (di / 12)
@@ -135,7 +136,7 @@ def calculate_player_trends():
             
         elif role == 'Outside/Winger':
             score = (metres * 0.1) + (i50 * 3.0) + (up * 1.5) + (mk * 2.0) + (ga * 4.0) - (cg * 2.0)
-            pir = min(100, max(10, (score / 115.0) * 100))
+            pir = max(10, (score / 115.0) * 100)
             # Volume protection: if Disposals < 12, scale down
             if di < 12:
                 pir = pir * (di / 12)
@@ -143,7 +144,7 @@ def calculate_player_trends():
             
         elif role == 'Key Forward':
             score = (mi * 8.0) + (gl * 12.0) + (bh * 4.0) + (cm * 6.0) + (cp * 1.5) - (cg * 2.0)
-            pir = min(100, max(10, (score / 105.0) * 100))
+            pir = max(10, (score / 105.0) * 100)
             # Volume protection: if Disposals < 6, scale down
             if di < 6:
                 pir = pir * (di / 6)
@@ -151,23 +152,23 @@ def calculate_player_trends():
             
         elif role == 'Small/General Forward':
             score = (gl * 15.0) + (bh * 5.0) + (ga * 6.0) + (tk * 3.0) + (i50 * 2.0) + (cp * 1.5) - (cg * 1.5)
-            pir = min(100, max(10, (score / 90.0) * 100))
+            pir = max(10, (score / 90.0) * 100)
             # Volume protection: if Disposals < 8, scale down
             if di < 8:
                 pir = pir * (di / 8)
             return max(10, pir)
             
         elif role == 'Key Defender':
-            score = (spoils * 5.0) + (mk * 3.0) + (cm * 6.0) + (cp * 2.0) - (cg * 2.0)
-            pir = min(100, max(10, (score / 85.0) * 100))
+            score = (spoils * 5.0) + (mk * 1.5) + (cm * 6.0) + (cp * 2.0) - (cg * 2.0)
+            pir = max(10, (score / 75.0) * 100)
             # Volume protection: if Disposals < 6, scale down
             if di < 6:
                 pir = pir * (di / 6)
             return max(10, pir)
             
         elif role == 'Rebounding Defender':
-            score = (rb * 6.0) + (metres * 0.12) + (up * 1.5) + (mk * 2.5) - (cg * 2.5)
-            pir = min(100, max(10, (score / 170.0) * 100))
+            score = (rb * 6.0) + (metres * 0.1) + (up * 0.8) + (mk * 1.2) - (cg * 2.5)
+            pir = max(10, (score / 140.0) * 100)
             # Volume protection: if Disposals < 10, scale down
             if di < 10:
                 pir = pir * (di / 10)
@@ -175,7 +176,7 @@ def calculate_player_trends():
             
         elif role == 'Ruck':
             score = (row['HO'] * 1.2) + (cl * 3.0) + (cp * 2.5) + (tk * 2.0) + (cm * 5.0) - (cg * 2.0)
-            pir = min(100, max(10, (score / 120.0) * 100))
+            pir = max(10, (score / 120.0) * 100)
             # Volume protection: if Disposals < 6, scale down
             if di < 6:
                 pir = pir * (di / 6)
@@ -183,7 +184,7 @@ def calculate_player_trends():
             
         # Default fallback
         score = (cp * 2.0) + (up * 1.0) + (tk * 1.5) + (gl * 5.0) - (cg * 1.5)
-        pir = min(100, max(10, (score / 75.0) * 100))
+        pir = max(10, (score / 75.0) * 100)
         if di < 8:
             pir = pir * (di / 8)
         return max(10, pir)
@@ -196,6 +197,16 @@ def calculate_player_trends():
     df_logs['role'] = df_logs['role'].fillna('Outside/Winger')
     df_logs['pir'] = df_logs.apply(calculate_pir, axis=1)
 
+    # Load player career games cache if exists to speed up calculations and avoid redundant lookups
+    cache_path = raw_dir / 'player_career_games_cache.json'
+    career_games_cache = {}
+    if cache_path.exists():
+        try:
+            with open(cache_path, 'r') as f:
+                career_games_cache = json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load cache from {cache_path}: {e}")
+
     # Calculate trends and assign narrative tags for each player
     player_results = []
     
@@ -204,6 +215,26 @@ def calculate_player_trends():
         p_team = p_row['team']
         p_role = p_row['role']
         p_games = p_row['games_played']
+        
+        # Get total historical matches directly via pyAFL Player stats
+        if p_name in career_games_cache:
+            total_career_games = career_games_cache[p_name]
+        else:
+            reformatted_name = ' '.join(reversed([part.strip() for part in p_name.split(',')])) if ',' in p_name else p_name
+            try:
+                p_obj = Player(reformatted_name)
+                p_stats = p_obj.get_player_stats()
+                df_totals = p_stats.season_stats_total
+                totals_row = df_totals[df_totals['Year'] == 'Totals']
+                if not totals_row.empty:
+                    total_career_games = int(float(totals_row['GM'].values[0]))
+                else:
+                    total_career_games = p_games
+            except Exception as e:
+                # Fallback to current season games if lookup fails
+                total_career_games = p_games
+            
+            career_games_cache[p_name] = total_career_games
         
         # Get match history
         p_history = df_logs[(df_logs['Player'] == p_name) & (df_logs['team'] == p_team)].copy()
@@ -271,11 +302,14 @@ def calculate_player_trends():
         player_trend = "Stable"
         if pir_delta >= 0.20:
             player_trend = "Rising"
-            if p_games <= 15:
+            # Breakout Watch: young players with less than 2 full seasons (approx 40 games)
+            if total_career_games <= 40:
                 narrative_tags.append("The Breakout Watch")
         elif pir_delta <= -0.20:
             player_trend = "Falling"
-            narrative_tags.append("The Cliff-Edge")
+            # Cliff-Edge: only for veterans/experienced players (>= 50 career games)
+            if total_career_games >= 50:
+                narrative_tags.append("The Cliff-Edge")
 
         # Top performance highlight
         best_stat = "Disposals"
@@ -298,6 +332,7 @@ def calculate_player_trends():
             'team': p_team,
             'role': p_role,
             'games_played': int(p_games),
+            'career_games': int(total_career_games),
             'pir': round(float(p_row['pir']), 1),
             'recent_pir': round(float(recent_avg_pir), 1),
             'pir_trend': round(float(pir_delta * 100), 1),
@@ -309,6 +344,13 @@ def calculate_player_trends():
 
     # Sort results by PIR descending to show top players
     player_results = sorted(player_results, key=lambda x: x['pir'], reverse=True)
+
+    # Save player career games cache
+    try:
+        with open(cache_path, 'w') as f:
+            json.dump(career_games_cache, f, indent=2)
+    except Exception as e:
+        print(f"Warning: Could not save cache to {cache_path}: {e}")
 
     # Save output
     output_path = metrics_dir / 'player_trends.json'
