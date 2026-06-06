@@ -58,7 +58,8 @@ def calculate_team_trends():
                 'winner': m['Winning team'],
                 'margin': m['Margin'],
                 'Home team score detail': m.get('Home team score detail', []),
-                'Away team score detail': m.get('Away team score detail', [])
+                'Away team score detail': m.get('Away team score detail', []),
+                'round': m.get('Round', 1)
             })
         except (KeyError, ValueError):
             continue
@@ -82,7 +83,8 @@ def calculate_team_trends():
                             'away_score': None,
                             'winner': None,
                             'margin': None,
-                            'is_future': True
+                            'is_future': True,
+                            'round': fix.get('round', 1)
                         })
                     except (KeyError, ValueError):
                         continue
@@ -107,6 +109,33 @@ def calculate_team_trends():
         df_all_matches = pd.concat([df_matches, df_future], ignore_index=True)
     else:
         df_all_matches = df_matches.copy()
+
+    # Pre-calculate previous season (2025) endpoints for anchor weights
+    # We find each team's 2025 points and percentages to use as an anchor in early 2026
+    df_matches_2025 = df_matches[df_matches['date'].dt.year == 2025]
+    team_2025_stats = {}
+    for team_obj in teams:
+        t_name = team_obj['name']
+        t_m_2025 = df_matches_2025[(df_matches_2025['home_team'] == t_name) | (df_matches_2025['away_team'] == t_name)]
+        pts_2025 = 0
+        pf_2025 = 0
+        pa_2025 = 0
+        for _, r in t_m_2025.iterrows():
+            is_home = r['home_team'] == t_name
+            score = r['home_score'] if is_home else r['away_score']
+            opp_score = r['away_score'] if is_home else r['home_score']
+            won = r['winner'] == t_name
+            pf_2025 += score
+            pa_2025 += opp_score
+            if won:
+                pts_2025 += 4
+            elif score == opp_score:
+                pts_2025 += 2
+        pct_2025 = (pf_2025 / pa_2025 * 100) if pa_2025 > 0 else 100.0
+        team_2025_stats[t_name] = {
+            "pts": pts_2025,
+            "pct": pct_2025
+        }
 
     # Pass 1: Calculate metrics and current ladder for all teams
     team_data_map = {}
@@ -233,23 +262,6 @@ def calculate_team_trends():
         
         narrative_tags = []
         
-        # Group Chat Fuel Tags (from PRD)
-        if recent_win_rate > 0.6 and recent_sos < 0.4:
-            narrative_tags.append("Flat-Track Bullies")
-            
-        if finishing_power > 10 and abs(recent_avg_margin) < 12:
-            narrative_tags.append("The Cardiac Kids")
-            
-        if q3_power > 15 and q3_power > (q1_power + 10) and q3_power > (finishing_power + 10):
-            narrative_tags.append("Premiership Quarter Specialists")
-            
-        if recent_win_rate < 0.3 and -15 < recent_avg_margin < 0:
-            narrative_tags.append("Honourable Losses")
-            
-        if len(team_matches) >= 15 and recent_win_rate <= 0.2 and consecutive_losses >= 3:
-            # We don't have season_win_rate easily available without extra calculation, so just proxy it
-            narrative_tags.append("September Teasers")
-        
         if not prev_5.empty:
             prev_win_rate = prev_5['won'].mean()
             prev_avg_margin = prev_5['team_margin'].mean()
@@ -304,15 +316,31 @@ def calculate_team_trends():
         elif trend == "Falling" and next_3_sos < 0.45:
             narrative_tags.append("Soft Landing")
 
-        # Step A: Calculate Form Modifier
-        norm_efficiency = rolling_efficiency / 100.0
-        norm_win_rate = recent_win_rate / 0.5
-        norm_sos = recent_sos_multiplier
-        form_modifier = (norm_efficiency * 0.5) + (norm_win_rate * 0.3) + (norm_sos * 0.2)
+        # Step A: Calculate Form Modifier (PIR / Trend upgrade centering around 1.0)
+        form_modifier = 1.0 + (((rolling_efficiency - 100) / 100) * 0.4) + ((recent_win_rate - 0.5) * 0.4) + ((recent_sos - 0.5) * 0.2)
 
-        # Step B: Calculate Expected Points & Percentage
-        x_pts = current_points * form_modifier
-        x_pct = current_percentage * form_modifier
+        # Step B: Calculate Expected Points & Percentage (With Early Season Anchor Weight)
+        # Determine 2026 games played to apply decay weight
+        games_played_2026 = len(team_matches_current)
+        if games_played_2026 > 0 and games_played_2026 <= 5:
+            # Anchor decays by 20% each week: round 1 has 80% 2025, round 5 has 0% 2025.
+            # Blend current points/percent with last season endpoints.
+            hist_weight = 1.0 - (games_played_2026 * 0.2)
+            curr_weight = games_played_2026 * 0.2
+            
+            anchor_stats = team_2025_stats.get(team_name, {"pts": 32, "pct": 100.0}) # default average fallback
+            # Scale 2025 points down to match the progression of 2026 games played
+            # Average pts per game in 2025 * games played in 2026 is a good base
+            scaled_2025_pts = (anchor_stats["pts"] / 23) * games_played_2026
+            
+            blended_pts = (scaled_2025_pts * hist_weight) + (current_points * curr_weight)
+            blended_pct = (anchor_stats["pct"] * hist_weight) + (current_percentage * curr_weight)
+            
+            x_pts = blended_pts * form_modifier
+            x_pct = blended_pct * form_modifier
+        else:
+            x_pts = current_points * form_modifier
+            x_pct = current_percentage * form_modifier
 
         # Player Correlations
         key_players = []
@@ -358,7 +386,6 @@ def calculate_team_trends():
                     max_delta = -1.0
                     
                     for p in candidates:
-                        # Find name
                         p_name = next(name for name, stats in recent_stats.items() if stats == p)
                         avg_recent = p['CP'] / p['games'] if p['games'] > 0 else 0
                         
@@ -389,7 +416,7 @@ def calculate_team_trends():
                             narrative_tags.append("The Engine Room")
                             
                 elif trend == "Falling":
-                    # Look for players who were high in CL in prev window and dropped in recent window
+                    # Upgrade: The Missing Link Identity Guard (Clearance delta <= -0.15 AND raw drop >= 1.5 clearances)
                     top_prev_cl = sorted([(name, p) for name, p in prev_stats.items()], key=lambda x: x[1]['CL'], reverse=True)[:5]
                     
                     worst_player = None
@@ -406,33 +433,52 @@ def calculate_team_trends():
                             avg_recent = 0
                             delta = -1.0 # Player dropped completely
                         
-                        if delta < min_delta:
-                            min_delta = delta
-                            worst_player = (p_prev, p_name, avg_recent, avg_prev, delta)
+                        raw_diff = avg_recent - avg_prev
+                        # Apply Identity Guard filters
+                        if delta <= -0.15 and raw_diff <= -1.5:
+                            if delta < min_delta:
+                                min_delta = delta
+                                worst_player = (p_prev, p_name, avg_recent, avg_prev, delta)
 
                     if worst_player:
                         p, p_name, avg_recent, avg_prev, delta = worst_player
-                        if delta < -0.05: # Only include if it's a real drop
-                            key_players.append({
-                                "playerId": str(p.get("#", "")),
-                                "playerName": p_name,
-                                "baselineScore": round(avg_prev, 1),
-                                "windowScore": round(avg_recent, 1),
-                                "delta": round(delta, 3),
-                                "role": "Missing Link",
-                                "narrativeBlurb": f"has seen their clearance numbers plummet by {abs(delta)*100:.1f}% over the last 5 weeks (down to {round(avg_recent, 1)} per game), leaving a massive hole in the middle.",
-                                "statType": "Clearances"
-                            })
-                            narrative_tags.append("The Missing Link")
+                        key_players.append({
+                            "playerId": str(p.get("#", "")),
+                            "playerName": p_name,
+                            "baselineScore": round(avg_prev, 1),
+                            "windowScore": round(avg_recent, 1),
+                            "delta": round(delta, 3),
+                            "role": "Missing Link",
+                            "narrativeBlurb": f"has seen their clearance numbers plummet by {abs(delta)*100:.1f}% over the last 5 weeks (down to {round(avg_recent, 1)} per game), leaving a massive hole in the middle.",
+                            "statType": "Clearances"
+                        })
+                        narrative_tags.append("The Missing Link")
                 
-                # Check for One-Man Band in recent window
+                # Check for One-Man Band in recent window (Upgrade: One-Man Band Safety Valve)
                 if recent_stats:
                     sorted_cl = sorted([(name, p) for name, p in recent_stats.items()], key=lambda x: x[1]['CL'], reverse=True)
                     if len(sorted_cl) > 0:
                         top_p_name, top_p = sorted_cl[0]
                         top_cl = top_p['CL']
                         total_cl = sum([p['CL'] for p in recent_stats.values()])
-                        if total_cl > 0 and (top_cl / total_cl) > 0.35:
+                        
+                        # Calculate team clearance differential over last 5 weeks
+                        team_cl_games = last_5_ids
+                        team_total_clearances = 0
+                        opponent_total_clearances = 0
+                        for m_id in team_cl_games:
+                            # Search df_matches for this match to compare team clearances (using player logs sum vs opponent logs sum)
+                            # Or we can just check if team average matches are won or margins are okay.
+                            # Since we don't have direct team clearances in df_matches, let's sum them from player_logs.
+                            # Fortunately, player_logs contains logs for all players of all matches.
+                            t_logs = [log for log in player_logs if log.get('match_id') == m_id]
+                            for log in t_logs:
+                                if log.get('team') == team_name:
+                                    team_total_clearances += log.get('CL', 0) if pd.notna(log.get('CL')) else 0
+                                else:
+                                    opponent_total_clearances += log.get('CL', 0) if pd.notna(log.get('CL')) else 0
+                                    
+                        if total_cl > 0 and (top_cl / total_cl) > 0.35 and team_total_clearances >= opponent_total_clearances:
                             if not any(kp["role"] == "One-Man Band" for kp in key_players):
                                 key_players.append({
                                     "playerId": str(top_p.get("#", "")),
@@ -445,6 +491,38 @@ def calculate_team_trends():
                                     "statType": "Clearances"
                                 })
                                 narrative_tags.append("The One-Man Band")
+
+        # Dynamic Cardiac Kids: Wins in last 5 matches >= 3 AND Count(Matches won where Q3_Margin < 0 and Q4_Margin > 0) >= 2
+        cardiac_wins_count = 0
+        for _, match_row in last_5.iterrows():
+            # Check if team won
+            if match_row['won']:
+                # Get Q3 cumulative margin and Q4 cumulative margin
+                # q3_margin is quarter-specific margin. Let's calculate cumulative margins
+                # Cumulative Q3 margin = q1_margin + q2_margin + q3_margin
+                # Cumulative Q4 margin = q1_margin + q2_margin + q3_margin + q4_margin (this matches team_margin)
+                q1 = match_row['q1_margin']
+                q2 = match_row['q2_margin']
+                q3 = match_row['q3_margin']
+                cumulative_q3 = q1 + q2 + q3
+                if cumulative_q3 < 0: # team was trailing at 3QT but won at FT
+                    cardiac_wins_count += 1
+                    
+        if recent_win_rate >= 0.6 and cardiac_wins_count >= 2:
+            narrative_tags.append("The Cardiac Kids")
+
+        # Dynamic Flat-Track Bullies: WR vs Top 8 Teams <= 0.20 AND WR vs Bottom 10 Teams >= 0.80
+        # Wait, to know Top 8 and Bottom 10, we'll assign it in Pass 2 since we need the current ladder positions.
+        # So we leave the default tag check out of Pass 1 and add it dynamically in Pass 2!
+
+        if q3_power > 15 and q3_power > (q1_power + 10) and q3_power > (finishing_power + 10):
+            narrative_tags.append("Premiership Quarter Specialists")
+            
+        if recent_win_rate < 0.3 and -15 < recent_avg_margin < 0:
+            narrative_tags.append("Honourable Losses")
+            
+        if len(team_matches) >= 15 and recent_win_rate <= 0.2 and consecutive_losses >= 3:
+            narrative_tags.append("September Teasers")
 
         team_data_map[team_name] = {
             "team": team_name,
@@ -473,7 +551,6 @@ def calculate_team_trends():
         }
 
     # Pass 2: Sort to find CLP and ELP, and apply final narrative tags
-    # Calculate Current Ladder Position (CLP)
     sorted_by_clp = sorted(
         team_data_map.values(), 
         key=lambda x: (x.get("current_points", 0), x.get("current_percentage", 0)), 
@@ -483,7 +560,9 @@ def calculate_team_trends():
     for i, t in enumerate(sorted_by_clp):
         t["current_ladder_position"] = i + 1
 
-    # Calculate Expected Ladder Position (ELP)
+    # Map team name to its current ladder position for easy lookup
+    team_ladder_ranks = {t["team"]: t["current_ladder_position"] for t in sorted_by_clp}
+
     sorted_by_elp = sorted(
         team_data_map.values(), 
         key=lambda x: (x.get("x_pts", 0), x.get("x_pct", 0)), 
@@ -502,7 +581,37 @@ def calculate_team_trends():
         clp = team_data["current_ladder_position"]
         elp = team_data["expected_ladder_position"]
         trend = team_data["trend"]
+        t_name = team_data["team"]
         
+        # Dynamic Flat-Track Bullies: WR vs Top 8 Teams <= 0.20 AND WR vs Bottom 10 Teams >= 0.80
+        # Let's check team matches in 2026
+        team_matches_all = df_all_matches[
+            (df_all_matches['home_team'] == t_name) | 
+            (df_all_matches['away_team'] == t_name)
+        ].copy()
+        team_matches_2026 = team_matches_all[(~team_matches_all['is_future']) & (team_matches_all['date'].dt.year == 2026)].copy()
+        
+        if len(team_matches_2026) >= 3:
+            def get_opponent_and_won(row):
+                opp = row['away_team'] if row['home_team'] == t_name else row['home_team']
+                won = row['winner'] == t_name
+                return pd.Series([opp, won])
+                
+            team_matches_2026[['opp', 'won']] = team_matches_2026.apply(get_opponent_and_won, axis=1)
+            
+            # Map opponent rank
+            team_matches_2026['opp_rank'] = team_matches_2026['opp'].map(team_ladder_ranks).fillna(10)
+            
+            top_8_games = team_matches_2026[team_matches_2026['opp_rank'] <= 8]
+            bottom_10_games = team_matches_2026[team_matches_2026['opp_rank'] > 8]
+            
+            wr_top_8 = top_8_games['won'].mean() if len(top_8_games) > 0 else 0.0
+            wr_bottom_10 = bottom_10_games['won'].mean() if len(bottom_10_games) > 0 else 1.0
+            
+            if wr_top_8 <= 0.20 and wr_bottom_10 >= 0.80:
+                if "Flat-Track Bullies" not in team_data["narrative_tags"]:
+                    team_data["narrative_tags"].append("Flat-Track Bullies")
+
         # Tag Name Triggers / Logic
         if trend == "Falling" and team_data["supporting_metrics"]["consecutive_losses"] >= 3:
             team_data["narrative_tags"].append("Sinking Ship")

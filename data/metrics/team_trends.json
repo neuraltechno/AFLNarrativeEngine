@@ -3,14 +3,15 @@
     "team": "Adelaide",
     "trend": "Stable",
     "narrative_tags": [
+      "Flat-Track Bullies",
       "Wildcard Contender"
     ],
     "key_players": [],
     "current_points": 24,
     "current_percentage": 107.91208791208791,
-    "form_modifier": 1.274499493605897,
-    "x_pts": 30.58798784654153,
-    "x_pct": 137.53390139791108,
+    "form_modifier": 1.2188915378477245,
+    "x_pts": 29.253396908345387,
+    "x_pct": 131.53313078752367,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 9.0,
@@ -33,7 +34,9 @@
     "trend": "Falling",
     "narrative_tags": [
       "The Missing Link",
+      "Flat-Track Bullies",
       "Sinking Ship",
+      "Market Corrected",
       "Wildcard Contender"
     ],
     "key_players": [
@@ -50,9 +53,9 @@
     ],
     "current_points": 24,
     "current_percentage": 103.88265746333045,
-    "form_modifier": 0.7656250087776321,
-    "x_pts": 18.37500021066317,
-    "x_pct": 79.53516053220612,
+    "form_modifier": 0.816853955166018,
+    "x_pts": 19.604494923984433,
+    "x_pct": 84.85695962207814,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -13.8,
@@ -68,16 +71,14 @@
       "games_analyzed": 92
     },
     "current_ladder_position": 9,
-    "expected_ladder_position": 11
+    "expected_ladder_position": 10
   },
   {
     "team": "Carlton",
     "trend": "Rising",
     "narrative_tags": [
       "Battle-Tested Rise",
-      "The Engine Room",
-      "Sleeping Giants",
-      "The Great Escape"
+      "The Engine Room"
     ],
     "key_players": [
       {
@@ -93,9 +94,9 @@
     ],
     "current_points": 16,
     "current_percentage": 87.54480286738351,
-    "form_modifier": 1.2119853355828507,
-    "x_pts": 19.39176536932561,
-    "x_pct": 106.10301728176032,
+    "form_modifier": 1.1527573736737784,
+    "x_pts": 18.444117978780454,
+    "x_pct": 100.91791703219369,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 0.0,
@@ -111,15 +112,16 @@
       "games_analyzed": 85
     },
     "current_ladder_position": 14,
-    "expected_ladder_position": 10
+    "expected_ladder_position": 12
   },
   {
     "team": "Collingwood",
     "trend": "Falling",
     "narrative_tags": [
-      "Honourable Losses",
       "Soft Landing",
       "The Missing Link",
+      "Honourable Losses",
+      "Flat-Track Bullies",
       "Market Corrected"
     ],
     "key_players": [
@@ -136,9 +138,9 @@
     ],
     "current_points": 22,
     "current_percentage": 99.89949748743719,
-    "form_modifier": 0.8215987734645548,
-    "x_pts": 18.075173016220205,
-    "x_pct": 82.07730460540377,
+    "form_modifier": 0.8807993867322774,
+    "x_pts": 19.377586508110102,
+    "x_pct": 87.99141612179736,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -10.8,
@@ -154,35 +156,23 @@
       "games_analyzed": 86
     },
     "current_ladder_position": 11,
-    "expected_ladder_position": 12
+    "expected_ladder_position": 11
   },
   {
     "team": "Essendon",
     "trend": "Falling",
     "narrative_tags": [
-      "September Teasers",
       "Soft Landing",
-      "The Missing Link",
+      "September Teasers",
       "Sinking Ship",
       "Market Corrected"
     ],
-    "key_players": [
-      {
-        "playerId": "46",
-        "playerName": "Blakiston, Lachlan",
-        "baselineScore": 2.0,
-        "windowScore": 1.2,
-        "delta": -0.4,
-        "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 40.0% over the last 5 weeks (down to 1.2 per game), leaving a massive hole in the middle.",
-        "statType": "Clearances"
-      }
-    ],
+    "key_players": [],
     "current_points": 4,
     "current_percentage": 70.48799380325329,
-    "form_modifier": 0.5081351494713005,
-    "x_pts": 2.032540597885202,
-    "x_pct": 35.81742726714821,
+    "form_modifier": 0.6521664340512396,
+    "x_pts": 2.6086657362049586,
+    "x_pct": 45.96990356209358,
     "supporting_metrics": {
       "recent_win_rate": 0.0,
       "recent_avg_margin": -33.8,
@@ -209,9 +199,9 @@
     "key_players": [],
     "current_points": 44,
     "current_percentage": 135.16355140186914,
-    "form_modifier": 1.5392497266445613,
-    "x_pts": 67.72698797236069,
-    "x_pct": 208.05045954763517,
+    "form_modifier": 1.3886389478293226,
+    "x_pts": 61.1001137044902,
+    "x_pct": 187.69337180356612,
     "supporting_metrics": {
       "recent_win_rate": 1.0,
       "recent_avg_margin": 25.0,
@@ -251,9 +241,9 @@
     ],
     "current_points": 32,
     "current_percentage": 121.85628742514969,
-    "form_modifier": 1.320693963394836,
-    "x_pts": 42.26220682863475,
-    "x_pct": 160.93486320410125,
+    "form_modifier": 1.2296912439925,
+    "x_pts": 39.35011980776,
+    "x_pct": 149.84560967213997,
     "supporting_metrics": {
       "recent_win_rate": 0.8,
       "recent_avg_margin": 33.4,
@@ -280,9 +270,9 @@
     "key_players": [],
     "current_points": 28,
     "current_percentage": 116.93290734824282,
-    "form_modifier": 1.1462649663030522,
-    "x_pts": 32.09541905648546,
-    "x_pct": 134.03609510125148,
+    "form_modifier": 1.1126406798728374,
+    "x_pts": 31.153939036439446,
+    "x_pct": 130.1043095314564,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 3.8,
@@ -304,9 +294,9 @@
     "team": "Greater Western Sydney",
     "trend": "Rising",
     "narrative_tags": [
-      "Premiership Quarter Specialists",
       "Soft Draw Rise",
       "The Engine Room",
+      "Premiership Quarter Specialists",
       "Wildcard Contender"
     ],
     "key_players": [
@@ -323,9 +313,9 @@
     ],
     "current_points": 24,
     "current_percentage": 103.20512820512822,
-    "form_modifier": 1.2604410525334517,
-    "x_pts": 30.250585260802843,
-    "x_pct": 130.08398042172163,
+    "form_modifier": 1.2072936969984334,
+    "x_pts": 28.975048727962402,
+    "x_pct": 124.59890077996654,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": 20.8,
@@ -341,7 +331,7 @@
       "games_analyzed": 87
     },
     "current_ladder_position": 10,
-    "expected_ladder_position": 7
+    "expected_ladder_position": 8
   },
   {
     "team": "Hawthorn",
@@ -353,21 +343,21 @@
     ],
     "key_players": [
       {
-        "playerId": "17",
-        "playerName": "Meek, Lloyd",
-        "baselineScore": 3.2,
-        "windowScore": 2.2,
-        "delta": -0.312,
+        "playerId": "3",
+        "playerName": "Newcombe, Jai",
+        "baselineScore": 9.0,
+        "windowScore": 7.2,
+        "delta": -0.2,
         "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 31.2% over the last 5 weeks (down to 2.2 per game), leaving a massive hole in the middle.",
+        "narrativeBlurb": "has seen their clearance numbers plummet by 20.0% over the last 5 weeks (down to 7.2 per game), leaving a massive hole in the middle.",
         "statType": "Clearances"
       }
     ],
     "current_points": 34,
     "current_percentage": 114.82926829268291,
-    "form_modifier": 1.0009883921490792,
-    "x_pts": 34.03360533306869,
-    "x_pct": 114.94276463994791,
+    "form_modifier": 1.0035376743354092,
+    "x_pts": 34.12028092740391,
+    "x_pct": 115.23549684807575,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": 1.4,
@@ -388,26 +378,13 @@
   {
     "team": "Melbourne",
     "trend": "Falling",
-    "narrative_tags": [
-      "The Missing Link"
-    ],
-    "key_players": [
-      {
-        "playerId": "11",
-        "playerName": "Gawn, Max",
-        "baselineScore": 6.6,
-        "windowScore": 5.2,
-        "delta": -0.212,
-        "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 21.2% over the last 5 weeks (down to 5.2 per game), leaving a massive hole in the middle.",
-        "statType": "Clearances"
-      }
-    ],
+    "narrative_tags": [],
+    "key_players": [],
     "current_points": 28,
     "current_percentage": 101.79640718562875,
-    "form_modifier": 0.9179282394958855,
-    "x_pts": 25.701990705884796,
-    "x_pct": 93.4417968349105,
+    "form_modifier": 0.9423088296455536,
+    "x_pts": 26.3846472300755,
+    "x_pct": 95.92365331721206,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": 0.4,
@@ -446,9 +423,9 @@
     ],
     "current_points": 20,
     "current_percentage": 97.55409219190969,
-    "form_modifier": 0.7488623931744545,
-    "x_pts": 14.97724786348909,
-    "x_pct": 73.05459094279485,
+    "form_modifier": 0.813818951689268,
+    "x_pts": 16.27637903378536,
+    "x_pct": 79.39136904061814,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -25.2,
@@ -472,27 +449,15 @@
     "narrative_tags": [
       "Honourable Losses",
       "September Teasers",
-      "The Missing Link",
       "Sinking Ship",
       "Market Corrected"
     ],
-    "key_players": [
-      {
-        "playerId": "24",
-        "playerName": "Sweet, Jordon",
-        "baselineScore": 5.0,
-        "windowScore": 4.2,
-        "delta": -0.16,
-        "role": "Missing Link",
-        "narrativeBlurb": "has seen their clearance numbers plummet by 16.0% over the last 5 weeks (down to 4.2 per game), leaving a massive hole in the middle.",
-        "statType": "Clearances"
-      }
-    ],
+    "key_players": [],
     "current_points": 12,
     "current_percentage": 100.89086859688197,
-    "form_modifier": 0.7221163554061855,
-    "x_pts": 8.665396264874225,
-    "x_pct": 72.85494632494478,
+    "form_modifier": 0.7963990867940018,
+    "x_pts": 9.556789041528022,
+    "x_pct": 80.34939561641045,
     "supporting_metrics": {
       "recent_win_rate": 0.2,
       "recent_avg_margin": -6.4,
@@ -532,9 +497,9 @@
     ],
     "current_points": 8,
     "current_percentage": 60.35276073619632,
-    "form_modifier": 0.7133732992934261,
-    "x_pts": 5.706986394347409,
-    "x_pct": 43.05404804784711,
+    "form_modifier": 0.7875821720347728,
+    "x_pts": 6.300657376278182,
+    "x_pct": 47.532758388908455,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -31.6,
@@ -573,9 +538,9 @@
     ],
     "current_points": 20,
     "current_percentage": 102.28353948620361,
-    "form_modifier": 0.8531279924837142,
-    "x_pts": 17.062559849674283,
-    "x_pct": 87.2609507059936,
+    "form_modifier": 0.8932531854310461,
+    "x_pts": 17.865063708620923,
+    "x_pct": 91.36509746321356,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -7.2,
@@ -597,8 +562,8 @@
     "team": "Sydney",
     "trend": "Falling",
     "narrative_tags": [
-      "Premiership Quarter Specialists",
       "The Missing Link",
+      "Premiership Quarter Specialists",
       "Market Corrected",
       "Glass Ceiling"
     ],
@@ -616,9 +581,9 @@
     ],
     "current_points": 40,
     "current_percentage": 152.42825607064017,
-    "form_modifier": 1.350126771927496,
-    "x_pts": 54.00507087709984,
-    "x_pct": 205.79746931919118,
+    "form_modifier": 1.2636768313418993,
+    "x_pts": 50.547073253675975,
+    "x_pct": 192.6200556383182,
     "supporting_metrics": {
       "recent_win_rate": 0.8,
       "recent_avg_margin": 23.6,
@@ -657,9 +622,9 @@
     ],
     "current_points": 16,
     "current_percentage": 69.98407643312102,
-    "form_modifier": 1.0107667476693623,
-    "x_pts": 16.172267962709796,
-    "x_pct": 70.7375773249498,
+    "form_modifier": 1.0208420894310113,
+    "x_pts": 16.33347343089618,
+    "x_pct": 71.44269081288685,
     "supporting_metrics": {
       "recent_win_rate": 0.4,
       "recent_avg_margin": -1.2,
@@ -700,9 +665,9 @@
     ],
     "current_points": 28,
     "current_percentage": 93.72759856630825,
-    "form_modifier": 1.070640467517644,
-    "x_pts": 29.97793309049403,
-    "x_pct": 100.34855994833832,
+    "form_modifier": 1.0424019458210787,
+    "x_pts": 29.187254482990205,
+    "x_pct": 97.70183112265666,
     "supporting_metrics": {
       "recent_win_rate": 0.6,
       "recent_avg_margin": -3.0,
@@ -718,6 +683,6 @@
       "games_analyzed": 82
     },
     "current_ladder_position": 7,
-    "expected_ladder_position": 8
+    "expected_ladder_position": 7
   }
 ]
