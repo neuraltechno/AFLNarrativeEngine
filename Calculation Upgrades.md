@@ -63,7 +63,7 @@ $$Metres\_Gained\_Proxy = (Kicks \times 22) + (Handballs \times 4) + (I50 \times
 ### Volume Protection for PIR Normalization
 
 * **The Problem:** Your PIR raw denominators (e.g., dividing Inside Midfielder raw score by 110) assume a high-volume performance. If a player subbed on late in the game gets 3 clearances, 4 tackles, and 4 contested possessions, their raw score will be mathematically decent, but their low total volume shouldn't equate to a 75 PIR match.
-* **The Fix:** Scale the raw score by a **Time on Ground (TOG%)** factor, or if `pyAFL` doesn't reliably extract TOG% from `afltables.com`, apply a progressive penalization multiplier if total Disposals are below a baseline floor for that specific role (e.g., if $DI < 12$ for a Midfielder, multiply PIR by $\frac{DI}{12}$).
+* **The Fix:** Scale the raw score by a **Time on Ground (TOG%)** factor, or if the Fryzigg feed doesn't reliably extract TOG%, apply a progressive penalization multiplier if total Disposals are below a baseline floor for that specific role (e.g., if $DI < 12$ for a Midfielder, multiply PIR by $\frac{DI}{12}$).
 
 ### Veteran Status & "The Cliff-Edge" Validation
 

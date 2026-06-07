@@ -139,51 +139,52 @@ function TeamCard({ team, isExpanded, onToggle }: { team: TeamTrend, isExpanded:
             <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex flex-col">
               <div className="text-xs text-zinc-500 uppercase tracking-wider mb-4 font-semibold">Performance Analysis</div>
               
-              <div className="grid grid-cols-2 gap-3 mb-5">
-                <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
-                  <span className="text-xs text-zinc-500 mb-1 font-medium">Win Rate (Last 5)</span>
-                  <span className="text-xl font-bold text-zinc-100">{(team.supporting_metrics.recent_win_rate * 100).toFixed(0)}%</span>
+                <div className="grid grid-cols-2 gap-3 mb-5">
+                  <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
+                    <span className="text-xs text-zinc-500 mb-1 font-medium">Win Rate (Last 5)</span>
+                    <span className="text-xl font-bold text-zinc-100">{(team.supporting_metrics.recent_win_rate * 100)?.toFixed(0) || '-'}%</span>
+                  </div>
+                  <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
+                    <span className="text-xs text-zinc-500 mb-1 font-medium">Efficiency (3-Wk)</span>
+                    <span className="text-xl font-bold text-zinc-100">{(team.supporting_metrics.rolling_efficiency ?? 0).toFixed(1)}%</span>
+                  </div>
+                  <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
+                    <span className="text-xs text-zinc-500 mb-1 font-medium">Avg Margin</span>
+                    <span className={`text-xl font-bold ${team.supporting_metrics.recent_avg_margin > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {team.supporting_metrics.recent_avg_margin > 0 ? '+' : ''}{team.supporting_metrics.recent_avg_margin?.toFixed(1) || '-'}
+                    </span>
+                  </div>
+                  <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
+                    <span className="text-xs text-zinc-500 mb-1 font-medium">Avg Score</span>
+                    <span className="text-xl font-bold text-zinc-100">{team.supporting_metrics.recent_avg_score?.toFixed(1) || '-'}</span>
+                  </div>
                 </div>
-                <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
-                  <span className="text-xs text-zinc-500 mb-1 font-medium">Efficiency (3-Wk)</span>
-                  <span className="text-xl font-bold text-zinc-100">{team.supporting_metrics.rolling_efficiency?.toFixed(1) || '-'}%</span>
+                
+                <div className="space-y-3 text-sm mt-auto">
+                   {team.supporting_metrics.strength_of_schedule !== undefined && (
+                      <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
+                        <span className="text-zinc-400">Opponent SoS</span>
+                        <span className="font-mono bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800/50">{(team.supporting_metrics.strength_of_schedule * 100)?.toFixed(0) || '-'}%</span>
+                      </div>
+                    )}
+                    {team.supporting_metrics.weighted_margin_trend !== undefined && (
+                      <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
+                        <span className="text-zinc-400">SoS-Weighted Margin Trend</span>
+                        <span className={`font-mono px-2 py-0.5 rounded border border-zinc-800/50 ${team.supporting_metrics.weighted_margin_trend > 0 ? 'text-green-400 bg-green-950/20' : 'text-red-400 bg-red-950/20'}`}>
+                          {team.supporting_metrics.weighted_margin_trend > 0 ? '+' : ''}{team.supporting_metrics.weighted_margin_trend?.toFixed(1) || '-'}
+                        </span>
+                      </div>
+                    )}
+                    {team.supporting_metrics.finishing_power !== undefined && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-zinc-400">Finishing Power (Q4)</span>
+                        <span className={`font-mono px-2 py-0.5 rounded border border-zinc-800/50 ${team.supporting_metrics.finishing_power > 0 ? 'text-green-400 bg-green-950/20' : 'text-red-400 bg-red-950/20'}`}>
+                          {team.supporting_metrics.finishing_power > 0 ? '+' : ''}{team.supporting_metrics.finishing_power?.toFixed(1) || '-'}
+                        </span>
+                      </div>
+                    )}
                 </div>
-                <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
-                  <span className="text-xs text-zinc-500 mb-1 font-medium">Avg Margin</span>
-                  <span className={`text-xl font-bold ${team.supporting_metrics.recent_avg_margin > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {team.supporting_metrics.recent_avg_margin > 0 ? '+' : ''}{team.supporting_metrics.recent_avg_margin.toFixed(1)}
-                  </span>
-                </div>
-                <div className="bg-zinc-950 p-3 rounded border border-zinc-800/50 flex flex-col items-center justify-center">
-                  <span className="text-xs text-zinc-500 mb-1 font-medium">Avg Score</span>
-                  <span className="text-xl font-bold text-zinc-100">{team.supporting_metrics.recent_avg_score.toFixed(1)}</span>
-                </div>
-              </div>
-              
-              <div className="space-y-3 text-sm mt-auto">
-                 {team.supporting_metrics.strength_of_schedule !== undefined && (
-                    <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
-                      <span className="text-zinc-400">Opponent SoS</span>
-                      <span className="font-mono bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800/50">{(team.supporting_metrics.strength_of_schedule * 100).toFixed(0)}%</span>
-                    </div>
-                  )}
-                  {team.supporting_metrics.weighted_margin_trend !== undefined && (
-                    <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
-                      <span className="text-zinc-400">SoS-Weighted Margin Trend</span>
-                      <span className={`font-mono px-2 py-0.5 rounded border border-zinc-800/50 ${team.supporting_metrics.weighted_margin_trend > 0 ? 'text-green-400 bg-green-950/20' : 'text-red-400 bg-red-950/20'}`}>
-                        {team.supporting_metrics.weighted_margin_trend > 0 ? '+' : ''}{team.supporting_metrics.weighted_margin_trend.toFixed(1)}
-                      </span>
-                    </div>
-                  )}
-                  {team.supporting_metrics.finishing_power !== undefined && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-zinc-400">Finishing Power (Q4)</span>
-                      <span className={`font-mono px-2 py-0.5 rounded border border-zinc-800/50 ${team.supporting_metrics.finishing_power > 0 ? 'text-green-400 bg-green-950/20' : 'text-red-400 bg-red-950/20'}`}>
-                        {team.supporting_metrics.finishing_power > 0 ? '+' : ''}{team.supporting_metrics.finishing_power.toFixed(1)}
-                      </span>
-                    </div>
-                  )}
-              </div>
+
             </div>
 
             {/* COLUMN 3: Future & Story */}

@@ -8,7 +8,7 @@ import numpy as np
 # Add src to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.data.afl_provider import PyAFLProvider
+from src.data.afl_provider import FryziggProvider as Provider
 
 class AFLDataEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -34,7 +34,7 @@ def save_json(data, filename):
     print(f"Saved {filename} to {path}")
 
 def main():
-    provider = PyAFLProvider()
+    provider = Provider()
     
     print("Fetching teams...")
     try:
@@ -60,10 +60,13 @@ def main():
     for year in years:
         print(f"Fetching data for {year}...")
         try:
-            # Fetch Matches
+            # Fetch Matches (from fixture)
+            # The provider now expects all matches in the provider's df.
+            # We filter by year within get_matches.
             matches = provider.get_matches(year)
             if matches:
                 save_json(matches, f'matches_{year}.json')
+                print(f"  Saved {len(matches)} matches for {year}.")
             else:
                 print(f"No match data found for {year}")
 

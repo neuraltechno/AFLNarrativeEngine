@@ -1,8 +1,12 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
+
+from utils.fetch_raw_data import get_data
 import json
 import os
 import pandas as pd
 from datetime import datetime
-from pathlib import Path
 
 def calculate_team_trends():
     # Use absolute paths relative to workspace root
@@ -27,19 +31,21 @@ def calculate_team_trends():
             all_matches.extend(json.load(f))
             
     # Load player match logs
-    player_logs_path = raw_dir / 'player_match_logs_2026.json'
-    player_logs = []
-    if player_logs_path.exists():
-        with open(player_logs_path, 'r') as f:
-            player_logs = json.load(f)
+    # Using the new fetch system via utils.fetch_raw_data
+    # The new get_data() function loads all logs from 2026 into a single DF.
+    # To keep compatibility, let's load it and convert to the list of dicts required by the rest of the script.
+    df_logs = get_data()
+    player_logs = df_logs.to_dict(orient='records')
             
     # Group player logs by team and match_id
     team_player_logs = {}
     for log in player_logs:
         t = log.get('team')
+        # match_id is not in these logs, but we have 'GM' (games played/match number proxy)
+        # Use 'GM' as match_id to maintain consistency with team_player_logs structure
+        m_id = str(log.get('GM')) 
         if t not in team_player_logs:
             team_player_logs[t] = {}
-        m_id = log.get('match_id')
         if m_id not in team_player_logs[t]:
             team_player_logs[t][m_id] = []
         team_player_logs[t][m_id].append(log)
@@ -48,23 +54,30 @@ def calculate_team_trends():
     matches_data = []
     for m in all_matches:
         try:
-            date = datetime.fromisoformat(m['Date'])
+            # Handle possible datetime parsing issues
+            date_str = m.get('date') or m.get('Date')
+            date = pd.to_datetime(date_str)
+            
+            # Squiggle API keys are 'hteam', 'ateam', 'hscore', 'ascore' etc, 
+            # check what they actually are in matches_2026.json
             matches_data.append({
                 'date': date,
-                'home_team': m['Home team'],
-                'away_team': m['Away Team'],
-                'home_score': m['Home team score'],
-                'away_score': m['Away team score'],
-                'winner': m['Winning team'],
-                'margin': m['Margin'],
-                'Home team score detail': m.get('Home team score detail', []),
-                'Away team score detail': m.get('Away team score detail', []),
-                'round': m.get('Round', 1)
+                'home_team': m.get('hteam') or m.get('Home team'),
+                'away_team': m.get('ateam') or m.get('Away Team'),
+                'home_score': m.get('hscore') or m.get('Home team score'),
+                'away_score': m.get('ascore') or m.get('Away team score'),
+                'winner': m.get('winner') or m.get('Winning team'),
+                'margin': m.get('margin') or m.get('Margin'),
+                'Home team score detail': m.get('h_score_detail') or m.get('Home team score detail', []),
+                'Away team score detail': m.get('a_score_detail') or m.get('Away team score detail', []),
+                'round': m.get('round') or m.get('Round', 1)
             })
         except (KeyError, ValueError):
             continue
             
     df_matches = pd.DataFrame(matches_data).sort_values('date')
+    # Filter 2026 only
+    df_matches = df_matches[df_matches['date'].dt.year == 2026]
     
     # Load future fixtures
     future_data = []
@@ -638,6 +651,18 @@ def calculate_team_trends():
             team_data["narrative_tags"].append("Wildcard Contender")
 
         results.append(team_data)
+
+    # Sanitize NaNs before dumping to JSON
+    def sanitize(obj):
+        if isinstance(obj, float) and (pd.isna(obj) or obj != obj): # obj != obj is check for NaN
+            return None
+        if isinstance(obj, dict):
+            return {k: sanitize(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [sanitize(v) for v in obj]
+        return obj
+
+    results = sanitize(results)
 
     # Save output
     output_path = metrics_dir / 'team_trends.json'

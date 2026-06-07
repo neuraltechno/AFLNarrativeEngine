@@ -152,11 +152,24 @@ export default async function TeamsPage() {
     return posA - posB;
   });
 
+  // Determine max round from fixture data (completed matches)
+  const getRound = () => {
+    const fixturePath = path.join(process.cwd(), 'data', 'raw', 'fixture_2026.json');
+    if (!fs.existsSync(fixturePath)) return 0;
+    const fixtures = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+    const completed = fixtures.filter((f: any) => f.complete === 100);
+    return completed.length > 0 ? Math.max(...completed.map((f: any) => f.round)) : 0;
+  };
+  
+  const currentRound = getRound();
+
   return (
     <div className="p-8 font-sans max-w-4xl mx-auto">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Team Trends</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Analysis of team momentum based on recent performance.</p>
+      <header className="mb-8 flex justify-between items-end">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Team Trends</h1>
+          <p className="text-zinc-600 dark:text-zinc-400">2026 Season Analysis • Round {currentRound}</p>
+        </div>
       </header>
 
       <FormMatrix trends={trends} />

@@ -40,7 +40,7 @@ export default function AdminPage() {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-xl font-bold">Data Ingestion</h2>
-              <p className="text-sm text-zinc-500">Fetch latest matches and team data from pyAFL.</p>
+              <p className="text-sm text-zinc-500">Fetch latest matches and team data from Fryzigg.</p>
             </div>
             <button
               onClick={() => handleRun('fetch')}

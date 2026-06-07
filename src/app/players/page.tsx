@@ -46,14 +46,28 @@ export default async function PlayersPage() {
   // Show top 50 players by default to keep load times/rendering fast and clean
   const players = allPlayers.slice(0, 60);
 
+  // Determine round from fixtures (max round completed)
+  const getRound = () => {
+    const fixturePath = path.join(process.cwd(), 'data', 'raw', 'fixture_2026.json');
+    if (!fs.existsSync(fixturePath)) return 0;
+    const fixtures = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+    const completed = fixtures.filter((f: any) => f.complete === 100);
+    return completed.length > 0 ? Math.max(...completed.map((f: any) => f.round)) : 0;
+  };
+  
+  const currentRound = getRound();
+
   return (
     <div className="p-8 font-sans max-w-5xl mx-auto">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Player Ratings & Trends</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          We turn raw stats into highly interesting player narratives. Real physical impact without fantasy noise.
-        </p>
+      <header className="mb-8 flex justify-between items-end">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Player Ratings & Trends</h1>
+          <p className="text-zinc-600 dark:text-zinc-400">
+            2026 Season Analysis • Round {currentRound}
+          </p>
+        </div>
       </header>
+
 
       {/* Overview stats cards */}
       <div className="grid gap-4 md:grid-cols-3 mb-8">
